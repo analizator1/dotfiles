@@ -288,6 +288,8 @@ fi
 #export CFLAGS="-Wall -O2 -Wextra -Wvla -Winit-self"
 unset CFLAGS CXXFLAGS
 
+export CMAKE_EXPORT_COMPILE_COMMANDS=1
+
 export LESS="-RS"
 export EDITOR=vim
 
