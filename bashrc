@@ -232,6 +232,7 @@ set_ps1()
     esac
 
     local COLOR_OF_WORKDIR=$COLOR_EMB
+    local COLOR_OF_CMDLINE=$COLOR_C
 
     PROMPT_COMMAND="PS1_RET=\$?"
     PS1="${TERMINAL_TITLEBAR}\$([[ \$PS1_RET -ne 0 ]] && echo \"\[${COLOR_EMR}\](ret: \$PS1_RET)\")\
@@ -239,7 +240,10 @@ set_ps1()
 \[${COLOR_OF_USER}\]\u@\[${COLOR_OF_HOST}\]\h\[${COLOR_NONE}\]:\
 \[${COLOR_OF_WORKDIR}\]\$(ps1_print_workdir_without_color \"\w\")\
 \[${COLOR_EMG}\]\$(ps1_print_git_info)\[${COLOR_NONE}\]\
-${GNU_SCREEN_TITLEBAR}\\\$ "
+${GNU_SCREEN_TITLEBAR}\\\$ \[${COLOR_OF_CMDLINE}\]"
+
+    # cancel COLOR_OF_CMDLINE before executing a command
+    PS0="\[${COLOR_NONE}\]"
 }
 
 set_ps1
