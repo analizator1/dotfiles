@@ -1036,8 +1036,7 @@ if PlugLoaded('YouCompleteMe')
     let g:ycm_global_ycm_extra_conf = '~/ycm_global_extra_conf.py'
 
     " Clangd 17.0.1 added new semantic highlight groups which are not defined in YCM.
-    "call prop_type_add( 'YCM_HL_bracket', { 'highlight': 'Normal' } )
-    "call prop_type_add( 'YCM_HL_label', { 'highlight': 'Normal' } )
+    call prop_type_add( 'YCM_HL_label', { 'highlight': 'Normal' } )
 
     " These are normally mapped to Structure and Structure links to Type.
     " Edit: in everforest, YCM_HL_class maps to TSType.
