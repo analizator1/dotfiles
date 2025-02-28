@@ -298,7 +298,7 @@ if [ -f ~/.bashrc_gitconfig ]; then
 fi
 
 # fix for eclipse under xpra
-export GTK_IM_MODULE=ibus
+#export GTK_IM_MODULE=ibus
 
 # First check for xpra sessions, then x2go. Reason: Chrome renders slowly under x2go.
 # Ignore existing DISPLAY, which may be orphaned, as GNU screen keeps env vars from when it was started and each new
@@ -307,16 +307,15 @@ export GTK_IM_MODULE=ibus
 if [[ -n $(pgrep xpra) ]]; then
     XPRA_LIST_OUT=$(xpra list 2>/dev/null)
     ret=$?
-    echo "$XPRA_LIST_OUT"
+    #echo "$XPRA_LIST_OUT"
     if [[ $ret -ne 0 ]]; then
         echo "Error running xpra list" >&2
     else
-        session_ids=( $(echo "$XPRA_LIST_OUT" | grep "LIVE" | sed 's/LIVE session at//') )
+        session_ids=( $(echo "$XPRA_LIST_OUT" | grep "LIVE" | sed 's/LIVE session at//' | sort -u) )
         if [[ ${#session_ids[@]} -eq 1 ]]; then
             id_to_use=${session_ids[0]}
-            cmd="export DISPLAY=$id_to_use"
-            echo ".bashrc executing: $cmd"
-            eval "$cmd"
+            echo ".bashrc: setting DISPLAY for xpra: $id_to_use"
+            export DISPLAY=$id_to_use
         fi
     fi
 fi
@@ -325,9 +324,8 @@ if which x2golistsessions &>/dev/null; then
     session_ids=( $(x2golistsessions | cut -d'|' -f3) )
     if [[ ${#session_ids[@]} -eq 1 ]]; then
         id_to_use=":${session_ids[0]}"
-        cmd="export DISPLAY=$id_to_use"
-        echo ".bashrc executing: $cmd"
-        eval "$cmd"
+        echo ".bashrc: setting DISPLAY for x2go: $id_to_use"
+        export DISPLAY=$id_to_use
     fi
 fi
 
