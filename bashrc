@@ -228,7 +228,7 @@ set_ps1()
         root)
             local COLOR_OF_USER=$COLOR_R ;;
         *)
-            local COLOR_OF_USER=$COLOR_G ;;
+            local COLOR_OF_USER=$COLOR_M ;;
     esac
 
     local COLOR_OF_WORKDIR=$COLOR_EMB
