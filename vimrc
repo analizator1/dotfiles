@@ -851,19 +851,26 @@ let g:CtrlSpaceSaveWorkspaceOnExit = 1
 """"""""""""""""""""""""""""
 " LSP common configuration - things that should be shared between vim-lsp and YouCompleteMe.
 
-" https://github.com/ycm-core/YouCompleteMe/wiki/FAQ#im-using-clangd-and-it-is-inserting-headers-that-i-dont-want
-" For query-driver see https://clangd.llvm.org/design/compile-commands
-" https://github.com/hedronvision/bazel-compile-commands-extractor even suggests to use: --query-driver=**
-" If query driver exists, you should see something like this in clangd logs:
-" I[15:01:37.301] System includes extractor: successfully executed /opt/icecream/bin/g++-8
 let s:clangd_common_args = [
     \ '--header-insertion=never'
 \ ]
-if executable('/opt/icecream/bin/g++-8')
-    call add(s:clangd_common_args, '--query-driver=/opt/icecream/bin/g++-8')
-elseif executable('/usr/bin/g++-8')
-    call add(s:clangd_common_args, '--query-driver=/usr/bin/g++-8')
-endif
+
+" https://github.com/ycm-core/YouCompleteMe/wiki/FAQ#im-using-clangd-and-it-is-inserting-headers-that-i-dont-want
+" For query-driver see https://clangd.llvm.org/design/compile-commands
+" https://github.com/hedronvision/bazel-compile-commands-extractor even suggests to use: --query-driver=**
+"
+" You should see something like this in clangd logs:
+"
+" > I[15:01:37.301] System includes extractor: successfully executed /opt/icecream/bin/g++-8
+"
+" Note that cmake may use /usr/bin/c++ (not g++) so we must use wildcard.
+" Watch out: Ubuntu 22.04 and Mint 21 are affected by an issue that system includes extractor does not work for headers
+" of boost. Workaround: sudo apt install g++-12
+" See https://github.com/clangd/clangd/issues/1394#issuecomment-1328676884
+call add(s:clangd_common_args, '--query-driver=/usr/bin/*')
+call add(s:clangd_common_args, '--query-driver=/opt/icecream/bin/*')
+" For debugging:
+"call add(s:clangd_common_args, '--log=verbose')
 
 """"""""""""""""""""""""""""
 " LSP mappings
