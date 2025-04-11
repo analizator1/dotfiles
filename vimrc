@@ -1053,6 +1053,19 @@ if PlugLoaded('YouCompleteMe')
     call prop_type_add( 'YCM_HL_enum', { 'highlight': 'Type' } )
 endif
 
+function! RunClangFormat()
+    let l:formatdiff = 1
+    let l:clang_format_py_path = fnamemodify(exepath("clang-format"), ":h:h") . "/share/clang/clang-format.py"
+    " Assuming CWD is repo root, prevent running clang-format in projects without a config file, which likely don't use
+    " clang-format at all.
+    if filereadable(".clang-format")
+        call execute("py3f " . l:clang_format_py_path)
+    endif
+endfunction
+if executable("clang-format") && has("python3")
+    autocmd BufWritePre *.h,*.c,*.hpp,*.cc,*.cpp call RunClangFormat()
+endif
+
 """"""""""""""""""""""""""""
 " choose a colorscheme
 
