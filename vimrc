@@ -1183,6 +1183,10 @@ if PlugLoaded('vim-airline')
 
     let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
+    " certain number of spaces are allowed after tabs, but not in between
+    " this algorithm works well for /* */ style comments in a tab-indented file
+    let g:airline#extensions#whitespace#mixed_indent_algo = 1
+
     "let g:airline_left_sep = '»'
     "let g:airline_left_sep = '▶'
     "let g:airline_right_sep = '«'
