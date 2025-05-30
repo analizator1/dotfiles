@@ -89,6 +89,7 @@ if v:version >= 802
     set relativenumber               " relative line numbering
     set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
+    "set diffopt+=inline:word
 endif
 
 set nowrap
@@ -454,6 +455,7 @@ function s:SmartHome()
     endif
 endfunction
 
+" FIXME: use :keepjumps
 " Assumptions about C++ style:
 " - { is at the first column on its own line
 " - line before contains closing parens of a method parameter list
