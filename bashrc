@@ -301,31 +301,32 @@ fi
 #export GTK_IM_MODULE=ibus
 
 # First check for xpra sessions, then x2go. Reason: Chrome renders slowly under x2go.
-# Ignore existing DISPLAY, which may be orphaned, as GNU screen keeps env vars from when it was started and each new
-# window is opened with old env even if env is different at the point of re-attach.
-if [[ -n $(pgrep xpra) ]]; then
-    XPRA_LIST_OUT=$(xpra list-sessions 2>/dev/null)
-    ret=$?
-    if [[ $ret -ne 0 ]]; then
-        echo "Error listing xpra sessions" >&2
-    else
-        session_ids=( $(echo "$XPRA_LIST_OUT" | sed -n 's/\bSocketState.LIVE.*//p') )
-        if [[ ${#session_ids[@]} -eq 1 ]]; then
-            id_to_use=${session_ids[0]}
-            echo ".bashrc: setting DISPLAY for xpra: $id_to_use"
-            export DISPLAY=$id_to_use
-        elif [[ ${#session_ids[@]} -gt 1 ]]; then
-            echo ".bashrc: don't know which xpra session to use. Sessions:" "${#session_ids[@]}"
+# Ignore existing DISPLAY (unless it is :0 which means desktop X session), which may be orphaned, as GNU screen keeps
+# env vars from when it was started and each new window is opened with old env even if env is different at the point of
+# re-attach.
+if [[ $DISPLAY != ":0" ]]; then
+    if [[ -n $(pgrep xpra) ]]; then
+        XPRA_LIST_OUT=$(xpra list-sessions 2>/dev/null)
+        ret=$?
+        if [[ $ret -ne 0 ]]; then
+            echo "Error listing xpra sessions" >&2
+        else
+            session_ids=( $(echo "$XPRA_LIST_OUT" | sed -n 's/\bSocketState.LIVE.*//p') )
+            if [[ ${#session_ids[@]} -eq 1 ]]; then
+                id_to_use=${session_ids[0]}
+                echo ".bashrc: setting DISPLAY for xpra: $id_to_use"
+                export DISPLAY=$id_to_use
+            elif [[ ${#session_ids[@]} -gt 1 ]]; then
+                echo ".bashrc: don't know which xpra session to use. Sessions:" "${#session_ids[@]}"
+            fi
         fi
-    fi
-fi
-
-if which x2golistsessions &>/dev/null; then
-    session_ids=( $(x2golistsessions | cut -d'|' -f3) )
-    if [[ ${#session_ids[@]} -eq 1 ]]; then
-        id_to_use=":${session_ids[0]}"
-        echo ".bashrc: setting DISPLAY for x2go: $id_to_use"
-        export DISPLAY=$id_to_use
+    elif which x2golistsessions &>/dev/null; then
+        session_ids=( $(x2golistsessions | cut -d'|' -f3) )
+        if [[ ${#session_ids[@]} -eq 1 ]]; then
+            id_to_use=":${session_ids[0]}"
+            echo ".bashrc: setting DISPLAY for x2go: $id_to_use"
+            export DISPLAY=$id_to_use
+        fi
     fi
 fi
 
