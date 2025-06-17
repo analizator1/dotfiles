@@ -232,7 +232,12 @@ set_ps1()
     esac
 
     local COLOR_OF_WORKDIR=$COLOR_EMB
-    local COLOR_OF_CMDLINE=$COLOR_C
+
+    local COLOR_OF_CMDLINE=$COLOR_NONE
+    # bash older than 4.4 does not have PS0
+    if (( ${BASH_VERSINFO[0]} >= 5 || ( ${BASH_VERSINFO[0]} == 4 && ${BASH_VERSINFO[1]} >= 4 ) )); then
+        local COLOR_OF_CMDLINE=$COLOR_C
+    fi
 
     PROMPT_COMMAND="PS1_RET=\$?"
     PS1="${TERMINAL_TITLEBAR}\$([[ \$PS1_RET -ne 0 ]] && echo \"\[${COLOR_EMR}\](ret: \$PS1_RET)\")\
