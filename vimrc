@@ -253,11 +253,19 @@ if &term == "screen" || &term == "screen-bce" || &term == "screen-256color" || &
 endif
 
 if &term == "tmux-256color"
-    " these didn't work in tmux
+    " A subset of above that does not work in tmux. Note that ctrl-left/right works out-of-the-box and if above mappings
+    " were used, it would not work correctly in vim's terminal emulator under tmux.
     set <f19>=[23;2~
     set <f20>=[24;2~
     nmap <f19> <S-F11>
     nmap <f20> <S-F12>
+
+    set <f17>=[5;5~
+    set <f18>=[6;5~
+    map <f17> <c-pageup>
+    map <f18> <c-pagedown>
+    map! <f17> <c-pageup>
+    map! <f18> <c-pagedown>
 endif
 
 " GNU screen: old versions (in fact any other than git master) don't support italics.
