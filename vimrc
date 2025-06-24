@@ -222,7 +222,7 @@ endif " has("autocmd")
 """"""""""""""""""""""""""""
 " Fixes for GNU screen.
 
-if &term == "screen" || &term == "screen-bce" || &term == "screen-256color" || &term == "screen-256color-fixed" || &term == "tmux-256color"
+if &term == "screen" || &term == "screen-bce" || &term == "screen-256color" || &term == "screen-256color-fixed"
     set <s-left>=[1;2D
     set <s-right>=[1;2C
     set <s-up>=[1;2A
@@ -247,15 +247,17 @@ if &term == "screen" || &term == "screen-bce" || &term == "screen-256color" || &
     map! <f17> <c-pageup>
     map! <f18> <c-pagedown>
 
+    " terminal title
+    set t_ts=]2;
+    set t_fs=
+endif
+
+if &term == "tmux-256color"
     " these didn't work in tmux
     set <f19>=[23;2~
     set <f20>=[24;2~
     nmap <f19> <S-F11>
     nmap <f20> <S-F12>
-
-    " terminal title
-    set t_ts=]2;
-    set t_fs=
 endif
 
 " GNU screen: old versions (in fact any other than git master) don't support italics.
