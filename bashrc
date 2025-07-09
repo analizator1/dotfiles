@@ -83,8 +83,6 @@ elif [[ -x /usr/bin/tput ]]; then
     fi
 fi
 
-PYTHONPATH=~/python
-
 MANPATH="/usr/local/share/man:$MANPATH"
 LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
@@ -116,7 +114,7 @@ if [ -d "$HOME/go/bin" ] ; then
     PATH="$HOME/go/bin:$PATH"
 fi
 
-export PATH PYTHONPATH LD_LIBRARY_PATH MANPATH PKG_CONFIG_PATH
+export PATH LD_LIBRARY_PATH MANPATH PKG_CONFIG_PATH
 
 if [[ -f ~/.location_tag ]]; then
     custom_bashrc=~/.bashrc_$(< ~/.location_tag)
