@@ -1035,6 +1035,8 @@ if PlugLoaded('YouCompleteMe')
 
     let g:ycm_clangd_args = s:clangd_common_args
 
+    let g:ycm_log_level = 'info'
+
     " Let clangd fully control code completion
     " Edit: is it really needed? Sometimes there is a weird error about "document modified" with it.
     " Edit2: uncommenting, as I'm getting ID-only completions, rather than semantic
