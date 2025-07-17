@@ -45,8 +45,15 @@ set textwidth=120
 
 " Whether to keep recommended style for python projects. If this is 1 (which is the default) then
 " $VIMRUNTIME/ftplugin/python.vim applies PEP8 settings for python buffers.
+" ostTesting
+" Below are used by a function in 'indentexpr' option for python files. Note that this function is loaded lazily, only
+" after you insert some text.
 let g:python_recommended_style=0
-" We can override it using autocmd - it must be after filetype plugin indent on.
+let g:python_indent = {}
+let g:python_indent.open_paren = 'shiftwidth()'
+let g:python_indent.nested_paren = 'shiftwidth()'
+let g:python_indent.continue = 'shiftwidth()'
+let g:python_indent.closed_paren_align_last_line = v:false
 
 " Workaround for some python2 modules getting imported by ycmd (python3).
 let $PYTHONPATH = ''
@@ -1199,7 +1206,8 @@ if PlugLoaded('vim-airline')
 
     " certain number of spaces are allowed after tabs, but not in between
     " this algorithm works well for /* */ style comments in a tab-indented file
-    let g:airline#extensions#whitespace#mixed_indent_algo = 1
+    " Commented out for ostTesting.
+    "let g:airline#extensions#whitespace#mixed_indent_algo = 1
 
     "let g:airline_left_sep = '»'
     "let g:airline_left_sep = '▶'
