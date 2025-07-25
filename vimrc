@@ -766,11 +766,11 @@ function! s:CustomizeOnedark()
     "hi cppStructure ctermfg=39 guifg=#61AFEF
 
     " More contrast for comments. Taken from spring-night.
-    " Use original onedark fg (text, i.e. Normal) color. spring-night has it too bright.
     hi Normal           ctermfg=231 ctermbg=233 guifg=#fffeeb guibg=#132132
-    hi Normal           ctermfg=145 guifg=#ABB2BF
     hi Comment          ctermfg=103 guifg=#8d9eb2
-    hi CursorLine       ctermbg=235 guibg=#3a4b5c
+    " Tweak text color. spring-night has it too bright.
+    hi Normal           ctermfg=145 guifg=#dfe0ee
+    hi CursorLine       ctermbg=235 guibg=#1d2b3d
 
     hi StatusLine       cterm=bold ctermfg=231 ctermbg=238 gui=bold guifg=#fffeeb guibg=#536273
     hi StatusLineNC     ctermfg=103 ctermbg=235 guifg=#8d9eb2 guibg=#3a4b5c
@@ -781,7 +781,7 @@ function! s:CustomizeOnedark()
     hi link StatusLineTermNC StatusLineNC
 
     " apply Normal to terminal windows:
-    "hi clear Terminal
+    hi clear Terminal
 endfunction
 
 """""""" colorscheme: edge """"""""
@@ -1091,10 +1091,10 @@ endif
 " choose a colorscheme
 
 " Note: this must be after prop_type_add() calls
-"colorscheme onedark
+colorscheme onedark
 "colorscheme edge
 "colorscheme everforest
-colorscheme spring-night
+"colorscheme spring-night
 
 """"""""""""""""""""""""""""
 " vim-asterisk configuration
