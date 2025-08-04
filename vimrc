@@ -91,12 +91,14 @@ set scrolloff=7
 set cursorline
 
 set diffopt+=vertical
-
 if v:version >= 802
     set relativenumber               " relative line numbering
     set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
-    "set diffopt+=inline:word
+    if index(split(&diffopt, ","), "inline:simple") != -1
+        set diffopt-=inline:simple
+        set diffopt+=inline:word
+    endif
 endif
 
 set nowrap
