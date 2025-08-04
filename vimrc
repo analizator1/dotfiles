@@ -88,7 +88,12 @@ set hidden
 "set viminfo^=!
 set fileencodings=ucs-bom,utf-8,latin2
 set scrolloff=7
-set cursorline
+
+" Disable cursorline:
+" * it causes slight confusion: it is in every window, so every window looks like active (yeah, one needs to look at
+"   statusline)
+" * it does not play well with diff highlighting
+"set cursorline
 
 set diffopt+=vertical
 if v:version >= 802
@@ -1210,6 +1215,8 @@ if PlugLoaded('vim-airline')
     " this algorithm works well for /* */ style comments in a tab-indented file
     " Commented out for ostTesting.
     "let g:airline#extensions#whitespace#mixed_indent_algo = 1
+    " Let's disable. One can always enable it with :AirlineToggleWhitespace.
+    let g:airline#extensions#whitespace#enabled = 0
 
     "let g:airline_left_sep = '»'
     "let g:airline_left_sep = '▶'
