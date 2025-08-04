@@ -750,8 +750,8 @@ function! s:CustomizeCppHighlight()
 
     " Structure normally links to Type.
     " YCM_HL_modifier is mapped to Keyword.
-    hi clear Structure
-    hi link Structure Keyword
+    "hi clear Structure
+    "hi link Structure Keyword
     hi clear cppModifier
     hi link cppModifier Keyword
 endfunction
@@ -771,6 +771,17 @@ function! s:CustomizeOnedark()
     " echo prop_type_get('YCM_HL_class')
     " class/struct keywords use cppStructure/cStructure highlight groups, respectively.
     "hi cppStructure ctermfg=39 guifg=#61AFEF
+
+    " Make sure for/while/do/if/switch are not violet as constants (from #define).
+    "hi clear Conditional
+    "hi link Conditional Structure
+    "hi clear Repeat
+    "hi link Repeat Structure
+    hi clear Macro
+    hi link Macro Structure
+    " cDefine normally links to Macro
+    hi clear cDefine
+    hi link cDefine Conditional
 
     " More contrast for comments. Taken from spring-night.
     hi Normal           ctermfg=231 ctermbg=233 guifg=#fffeeb guibg=#132132
