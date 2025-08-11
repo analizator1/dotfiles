@@ -105,7 +105,10 @@ endfunction
 augroup CursorLine
     autocmd!
     autocmd WinLeave * set nocursorline
-    autocmd WinEnter,VimEnter * call <SID>SetCursorLine()
+    " WinEnter is not done for the first window, when Vim has just started. Another event must be used:
+    " - VimEnter: this solves the issue, but it does not work when opening a file using nerdtree.
+    " - BufWinEnter: solves both issues. From docs: "after a buffer is displayed in a window".
+    autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
     " This works correctly when doing for example :windo diffthis, it executes after entering a window, then the window is
     " left before processing another one.
     autocmd OptionSet diff call <SID>SetCursorLine()
