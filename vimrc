@@ -94,6 +94,22 @@ set scrolloff=7
 "   statusline)
 " * it does not play well with diff highlighting
 "set cursorline
+" Instead enable it in current window only, except in diff mode:
+function s:SetCursorLine()
+    if &diff
+        set nocursorline
+    else
+        set cursorline
+    endif
+endfunction
+augroup CursorLine
+    autocmd!
+    autocmd WinLeave * set nocursorline
+    autocmd WinEnter,VimEnter * call <SID>SetCursorLine()
+    " This works correctly when doing for example :windo diffthis, it executes after entering a window, then the window is
+    " left before processing another one.
+    autocmd OptionSet diff call <SID>SetCursorLine()
+augroup END
 
 set diffopt+=vertical
 if v:version >= 802
