@@ -184,6 +184,8 @@ if has("autocmd")
     autocmd FileType tex syntax region verbatimComment start="\\begin{comment}" end="\\end{comment}" fold
     autocmd FileType tex hi def link verbatimComment Comment
 
+    autocmd FileType gitcommit setlocal textwidth=120
+
     " Kernel code
     autocmd BufRead,BufNewFile *repos/linux/*.h set filetype=c
 
