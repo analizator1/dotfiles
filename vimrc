@@ -830,9 +830,11 @@ function! s:CustomizeOnedark()
     hi CursorLine       ctermbg=235 guibg=#1d2b3d
 
     " active tab page label
-    hi TabLineSel       term=bold ctermfg=145 guifg=#dfe0ee
+    hi TabLineSel term=bold ctermfg=145 ctermbg=235 guifg=#dfe0ee guibg=#3a4b5c
     " inactive tab page label
-    hi TabLine          term=underline ctermfg=103 guifg=#8d9eb2
+    hi TabLine term=underline ctermfg=103 ctermbg=235 guifg=#8d9eb2 guibg=#3a4b5c
+    " tabline space with no labels
+    hi TabLineFill term=reverse ctermbg=235 guibg=#3a4b5c
 
     hi StatusLine       cterm=bold ctermfg=231 ctermbg=238 gui=bold guifg=#fffeeb guibg=#536273
     hi StatusLineNC     ctermfg=103 ctermbg=235 guifg=#8d9eb2 guibg=#3a4b5c
