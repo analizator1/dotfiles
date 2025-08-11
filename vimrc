@@ -766,8 +766,8 @@ function! s:CustomizeCppHighlight()
 
     " Structure normally links to Type.
     " YCM_HL_modifier is mapped to Keyword.
-    "hi clear Structure
-    "hi link Structure Keyword
+    hi clear Structure
+    hi link Structure Keyword
     hi clear cppModifier
     hi link cppModifier Keyword
 endfunction
@@ -799,12 +799,29 @@ function! s:CustomizeOnedark()
     hi clear cDefine
     hi link cDefine Conditional
 
+    " Swap these two.
+    hi IncSearch term=reverse ctermfg=235 ctermbg=180 guifg=#282C34 guibg=#E5C07B
+    hi Search term=reverse ctermfg=180 ctermbg=59 guifg=#E5C07B guibg=#5C6370
+
     " More contrast for comments. Taken from spring-night.
+    " Note: by default it is:
+    " Normal ctermfg=145 ctermbg=235 guifg=#ABB2BF guibg=#282C34
     hi Normal           ctermfg=231 ctermbg=233 guifg=#fffeeb guibg=#132132
     hi Comment          ctermfg=103 guifg=#8d9eb2
+    hi clear SpecialComment
+    hi link SpecialComment Comment
+    hi clear gitcommitComment
+    hi link gitcommitComment Comment
+    hi clear gitCommitSummary
+    hi link gitCommitSummary Normal
     " Tweak text color. spring-night has it too bright.
     hi Normal           ctermfg=145 guifg=#dfe0ee
     hi CursorLine       ctermbg=235 guibg=#1d2b3d
+
+    " active tab page label
+    hi TabLineSel       term=bold ctermfg=145 guifg=#dfe0ee
+    " inactive tab page label
+    hi TabLine          term=underline ctermfg=103 guifg=#8d9eb2
 
     hi StatusLine       cterm=bold ctermfg=231 ctermbg=238 gui=bold guifg=#fffeeb guibg=#536273
     hi StatusLineNC     ctermfg=103 ctermbg=235 guifg=#8d9eb2 guibg=#3a4b5c
