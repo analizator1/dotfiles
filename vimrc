@@ -665,7 +665,13 @@ endfunction
 
 command! -nargs=1 Title call <SID>Title(<q-args>)
 
-function s:GenericGrepFun(grep_cmd, grep_args)
+" This function can even be called directly from cmdline like:
+" :call GenericGrepFun("vcsgrep", expand("<cword>"))
+" with some custom grep-like script instead of "vcsgrep". However, it might make more sense to instead use standard grep
+" command (which calls rg for me) and for some custom search pattern generation, do it like:
+" :exe '!generate_search_patterns.sh % > _patterns.tmp' | lgrep -f _patterns.tmp
+" to recursively search current directory for some patterns generated from current file.
+function GenericGrepFun(grep_cmd, grep_args)
     let l:old_grepprg = &grepprg
     let &grepprg = a:grep_cmd
     let l:old_grepformat = &grepformat
@@ -679,13 +685,13 @@ endfunction
 
 " version-control-system aware grep, has -n implied
 function s:VcsgrepFun(grep_args)
-    call s:GenericGrepFun("vcsgrep", a:grep_args)
+    call GenericGrepFun("vcsgrep", a:grep_args)
 endfunction
 
 " in git repo typically this is faster
 " UPDATE: but in Strike engine repo for some reason it became slow, use vcsgrep instead.
 function s:GitGrepFun(grep_args)
-    call s:GenericGrepFun("git grep -n", a:grep_args)
+    call GenericGrepFun("git grep -n", a:grep_args)
 endfunction
 
 command! -nargs=1 Lvcsgrep call <SID>VcsgrepFun(<q-args>)
