@@ -88,6 +88,12 @@ set hidden
 "set viminfo^=!
 set fileencodings=ucs-bom,utf-8,latin2
 set scrolloff=7
+" After a couple of "jump back" (ctrl-o), when we make another jump, vim discards newer jumps, which is more reasonable
+" than the default behavior in which it keeps them. It makes more sense when doing code exploration, with frequently
+" jumping to function definitions and then going back. With "stack" it indeed goes back.
+if v:version >= 901
+    set jumpoptions=stack
+endif
 
 " Disable cursorline:
 " * it causes slight confusion: it is in every window, so every window looks like active (yeah, one needs to look at
