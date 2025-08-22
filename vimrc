@@ -100,9 +100,12 @@ endif
 "   statusline)
 " * it does not play well with diff highlighting
 "set cursorline
-" Instead enable it in current window only, except in diff mode:
+" Instead enable it in current window only, except:
+" * in diff mode - diff highlighting changes background color, but not foreground
+" * in nerdtree window - when hitting Enter on a file, it doesn't trigger WinLeave, which causes confusion, and then it
+"   triggers vim-search-pulse pulses in both active window and in nerdtree window
 function s:SetCursorLine()
-    if &diff
+    if &diff || &filetype == "nerdtree"
         set nocursorline
     else
         set cursorline
@@ -117,7 +120,7 @@ augroup CursorLine
     autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
     " This works correctly when doing for example :windo diffthis, it executes after entering a window, then the window is
     " left before processing another one.
-    autocmd OptionSet diff call <SID>SetCursorLine()
+    autocmd OptionSet diff,filetype call <SID>SetCursorLine()
 augroup END
 
 set diffopt+=vertical
