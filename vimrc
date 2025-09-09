@@ -861,6 +861,12 @@ function! s:CustomizeOnedark()
 
     " apply Normal to terminal windows:
     hi clear Terminal
+
+    " make sure changed lines don't look like IncSearch
+    hi clear DiffText
+    hi clear DiffChange
+    hi DiffText term=reverse cterm=reverse ctermfg=109 gui=reverse guifg=#7fbbb3
+    hi DiffChange term=bold cterm=none ctermfg=180 gui=none guifg=#7fbbb3
 endfunction
 
 """""""" colorscheme: edge """"""""
