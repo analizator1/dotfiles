@@ -100,16 +100,13 @@ endif
 "   statusline)
 " * it does not play well with diff highlighting
 "set cursorline
-" Instead enable it in current window only, except:
+" Instead enable it in current window only, except it is disabled:
 " * in diff mode - diff highlighting changes background color, but not foreground
-" * in nerdtree window - when hitting Enter on a file, it doesn't trigger WinLeave, which causes confusion, and then it
-"   triggers vim-search-pulse pulses in both active window and in nerdtree window. Actually checking &filetype is
-"   problematic, as it is not set when nerdtree is initially created, so we would need to hook on autocmd OptionSet
-"   filetype, but this causes another issue: it catches other windows and for vim-ctrlspace special window enabling
-"   cursorline leads to poor coloring (similar problem as in diff mode). Instead let's just skip unlisted buffers, but
-"   allow it in help buffers.
+" * in nerdtree window, as a workaround for the following issue: when hitting Enter on a file, it doesn't trigger
+"   WinLeave and &cursorline is kept set in nerdtree window even though it is no longer the current window
+" * in other unlisted buffers, such as vim-ctrlspace window, but enable it for vim help and man buffers
 function s:SetCursorLine()
-    if &diff || ( ! &buflisted && &buftype != "help" )
+    if &diff || ( ! &buflisted && &filetype != "help"  && &filetype != "man" )
         set nocursorline
     else
         set cursorline
@@ -122,9 +119,6 @@ augroup CursorLine
     " - VimEnter: this solves the issue, but it does not work when opening a file using nerdtree.
     " - BufWinEnter: solves both issues. From docs: "after a buffer is displayed in a window".
     autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
-    " This works correctly when doing for example :windo diffthis, it executes after entering a window, then the window is
-    " left before processing another one.
-    " Well, we should check for buflisted, but somehow it doesn't work with nerdtree, so let's hook on filetype instead.
     autocmd OptionSet diff,filetype call <SID>SetCursorLine()
 augroup END
 
