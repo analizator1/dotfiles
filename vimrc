@@ -133,6 +133,11 @@ if v:version >= 802
     "    set diffopt+=inline:word
     "endif
 endif
+if v:version >= 901
+    " If someone comments out a lot of lines with # or // comments, then this setting makes Vim highlight only the
+    " comment sign as changed (needs 'inline' option too).
+    set diffopt+=linematch:300
+endif
 
 set nowrap
 
