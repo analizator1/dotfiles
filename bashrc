@@ -296,6 +296,9 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export LESS="-RS"
 export EDITOR=vim
 
+# There are systems which disable this:
+stty susp ^z
+
 if [ -f ~/.bashrc_gitconfig ]; then
     . ~/.bashrc_gitconfig
 fi
