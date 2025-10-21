@@ -293,7 +293,13 @@ unset CFLAGS CXXFLAGS
 
 export CMAKE_EXPORT_COMPILE_COMMANDS=1
 
+# Note this option:
+#   -X or --no-init
+# makes 'less' leave its contents on screen after it exits. This is often unwanted, as it wastes terminal scroll buffer,
+# and some older terminal history may go away.
 export LESS="-RS"
+export SYSTEMD_LESS="RS"
+
 export EDITOR=vim
 
 # There are systems which disable this:
