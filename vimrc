@@ -770,8 +770,11 @@ function! s:CustomizeHighlightGeneric()
     " With vim-matchup, highlight of matching parenthesis can be confusing (it is kind of reverse of normal colors).
     " Especially with block cursor! Moreover, xml tags that are open-close (like <arg code="..." .. />) are highlighted
     " whole, which is distracting.
-    hi clear MatchParen
-    hi MatchParen term=underline cterm=underline gui=underline
+    " Edit: onedark has a reasonable setting.
+    "hi clear MatchParen
+    ""hi MatchParen term=underline cterm=underline gui=underline
+    "" Alternatively let's link to Search.
+    "hi link MatchParen Search
 
     " In some color schemes Todo has inverted colors (foreground same as Normal background), which makes text invisible
     " together with CursorLine (as it changes background to a similar color as Normal).
