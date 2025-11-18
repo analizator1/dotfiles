@@ -1,0 +1,102 @@
+# vim: sw=2
+[color]
+  ui = auto
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+  grep = auto
+[core]
+  excludesfile = ~/.gitglobalexclude
+  # less options:
+  # -X "Disables sending the termcap initialization and deinitialization strings to the terminal."
+  #    Basically it leaves data in terminal, rather than making it disappear.
+  # -F "Causes less to automatically exit if the entire file can be displayed on the first screen."
+  #pager = less -FXRS -x4
+  #pager = diff-so-fancy | less -FXRS -x4
+  # Fedora 20 compatible
+  pager = ~/scripts/diff-highlight
+
+  whitespace=trailing-space,cr-at-eol,tabwidth=4 # indent-with-non-tab
+  preloadindex = true
+[interactive]
+  # Disabling. 'git add -p' started displaying an error:
+  # fatal: mismatched output from interactive.diffFilter
+  # hint: Your filter must maintain a one-to-one correspondence
+  # hint: between its input and output lines.
+  #diffFilter = diff-so-fancy --patch
+#[pager]
+#  # From https://www.viget.com/articles/dress-up-your-git-diffs-with-word-level-highlights/
+#  # diff-highlight improves diff coloring but keeps text the same. For more condensed word diff use --word-diff=color
+#  # (or equivalent --color-words).
+#  # Below commands are typically used for long output, therefore let's not use -X nor -F.
+#  diff = /usr/share/git-core/contrib/diff-highlight | less
+#  show = /usr/share/git-core/contrib/diff-highlight | less
+#  log = /usr/share/git-core/contrib/diff-highlight | less
+[user]
+  email = sachanowicz@9livesdata.com
+  #email = krzysztof.sachanowicz@dotdata.com
+  #email = ksachanowicz@striketechnologies.com
+  name = Krzysztof Sachanowicz
+
+[color "diff-highlight"]
+  # Default makes highlight a reverse of normal, but it conflicts with search in less, so instead let's modify
+  # background color for highlight.
+  oldNormal = red
+  oldHighlight = red 52
+  newNormal = green
+  newHighlight = green 22
+
+[diff]
+  wordregex = [[:alnum:]_]+|[^[:space:]]
+  algorithm = patience
+  indentHeuristic = true
+[push]
+  # This is the default since git 2.0, but is not understood on gateway1.
+  #default = simple
+  default = current
+[alias]
+  st = status
+  ci = commit
+  co = checkout
+  br = branch
+  lg = log --stat --summary -M --decorate
+  logs = log --pretty=format:'%h %an %ad%x09%s' --date=iso
+  logmaster = log origin/master..HEAD
+  diffmaster = diff origin/master...HEAD
+  # https://stackoverflow.com/questions/12776015/git-alias-with-variables-not-working-as-expected-pathspec-did-not-match-any-fil
+  diffmaster-no-testbenches = "!f() { git diff origin/master...HEAD "$@" -- ':!*_tb*' ':!*cocotb*'; }; f"
+  cim = commit -m
+  cdiff = diff --cached
+  padd = add --patch
+  cpn = cherry-pick -n
+  unstage = reset HEAD
+  logp = log -p
+  bra = branch -a
+  grep = grep --color=auto
+  diff-mine = "!sh -c 'fileName=\"$0\"; git diff $* :1:$fileName :2:$fileName'"
+  diff-theirs = "!sh -c 'fileName=\"$0\"; git diff $* :1:$fileName :3:$fileName'"
+  restore-theirs = "!sh -c 'fileName=\"$0\"; git show :3:$fileName > $fileName'"
+  restore-mine = "!sh -c 'fileName=\"$0\"; git show :2:$fileName > $fileName'"
+  restore-master = "!sh -c 'fileName=\"$0\"; git show master:$fileName > $fileName'"
+  wdiff = diff --color-words
+  wshow = show --color-words
+  ciam = "!sh -c 'git add . && git commit --amend'"
+  stash-all = "!sh -c 'git add . && git stash'"
+  unstash-all = "!sh -c 'git stash pop && git unstage .'"
+  bral = "!sh -c 'git for-each-ref --sort=-committerdate --count=30 refs/heads/ --format=\"%(authordate:relative)%09%(authorname)%09%1B[0;32m%(refname:short)%1B[m%09%(subject)\" | column -s $\"\t\" -t'"
+  refl = reflog --decorate -a
+[merge]
+  renamelimit = 10000
+  #conflictStyle = diff3
+[checkout]
+  defaultRemote = origin
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[pull]
+	rebase = false
+[gc]
+	autoDetach = false

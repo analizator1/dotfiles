@@ -1,0 +1,6 @@
+defscrollback 10000
+altscreen on
+truecolor on
+
+# KS: this option has been removed on master
+#password none

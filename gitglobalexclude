@@ -1,0 +1,16 @@
+*.sw?
+.idea/
+.cproject
+.project
+.settings/
+tags
+.gdb_history
+RSYNC_WORKSPACE_COMMIT_INFO.txt
+cs_workspaces
+cs_files
+compile_commands*.json
+.cache/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+__pycache__/
