@@ -596,6 +596,10 @@ nmap <C-j> :jumps<CR>
 "nmap <C-p> :Files<CR>
 " Search for files in git repo:
 nmap <C-p> :GFiles<CR>
+" As above but start finder with a word under cursor.
+if PlugLoaded('fzf.vim')
+    nmap <silent> <leader>T :call fzf#vim#gitfiles('', fzf#vim#with_preview({'options': ['--query', expand('<cword>')]}), 0)<CR>
+endif
 
 " ctrl-left/right should work the same in insert mode as in normal
 imap <c-left> <c-\><c-o><c-left>
