@@ -197,6 +197,9 @@ if has("autocmd")
     " FIXME: don't add '@' for plain TeX
     autocmd FileType tex setlocal iskeyword=@,@-@
 
+    " To facilitate <leader>T with word under cursor if package name contains colons.
+    autocmd FileType perl setlocal iskeyword-=:
+
     " highlighting of \begin{comment} ... \end{comment} for LaTeX
     autocmd FileType tex syntax region verbatimComment start="\\begin{comment}" end="\\end{comment}" fold
     autocmd FileType tex hi def link verbatimComment Comment
