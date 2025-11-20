@@ -197,7 +197,7 @@ if has("autocmd")
     " FIXME: don't add '@' for plain TeX
     autocmd FileType tex setlocal iskeyword=@,@-@
 
-    " To facilitate <leader>T with word under cursor if package name contains colons.
+    " To facilitate search for word under cursor if package name contains colons.
     autocmd FileType perl setlocal iskeyword-=:
 
     " highlighting of \begin{comment} ... \end{comment} for LaTeX
@@ -590,17 +590,6 @@ nmap <silent> <C-N> :nohlsearch<CR>
 nmap <silent> <C-K> :set invcursorline<CR>
 nmap <C-j> :jumps<CR>
 
-" Fuzzy search files with Ctrl-P
-"nmap <silent> <C-p> :CtrlSpace O<CR>
-" fzf.vim does it better:
-"nmap <C-p> :Files<CR>
-" Search for files in git repo:
-nmap <C-p> :GFiles<CR>
-" As above but start finder with a word under cursor.
-if PlugLoaded('fzf.vim')
-    nmap <silent> <leader>T :call fzf#vim#gitfiles('', fzf#vim#with_preview({'options': ['--query', expand('<cword>')]}), 0)<CR>
-endif
-
 " ctrl-left/right should work the same in insert mode as in normal
 imap <c-left> <c-\><c-o><c-left>
 imap <c-right> <c-\><c-o><c-right>
@@ -961,6 +950,13 @@ autocmd ColorScheme spring-night call <SID>CustomizeSpringNight()
 "let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
 let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
 let g:CtrlSpaceSaveWorkspaceOnExit = 1
+
+" mappings
+if PlugLoaded('vim-ctrlspace')
+    " Fuzzy search files with Ctrl-P
+    " Commented out, fzf.vim does it better.
+    "nmap <silent> <C-p> :CtrlSpace O<CR>
+endif
 
 """"""""""""""""""""""""""""
 " LSP common configuration - things that should be shared between vim-lsp and YouCompleteMe.
@@ -1400,11 +1396,19 @@ nmap <leader>/ <Plug>localsearch_toggle
 """"""""""""""""""""""""""""
 " fzf.vim configuration
 "let g:fzf_command_prefix = 'Fzf'
-"
-"nnoremap <leader>fl :FzfLines<CR>
-"nnoremap <leader>fbl :FzfBLines<CR>
-"nnoremap <leader>ft :FzfTags<CR>
-"nnoremap <leader>fbt :FzfBTags<CR>
+
+" mappings
+if PlugLoaded('fzf.vim')
+    "nnoremap <leader>fl :Lines<CR>
+    "nnoremap <leader>fbl :BLines<CR>
+    "nnoremap <leader>ft :Tags<CR>
+    "nnoremap <leader>fbt :BTags<CR>
+
+    " Search for files in git repo:
+    nmap <C-p> :GFiles<CR>
+    " Search for word under cursor, but in git files list. As above but it starts finder with a word under cursor.
+    nmap <silent> <leader>T :call fzf#vim#gitfiles('', fzf#vim#with_preview({'options': ['--query', expand('<cword>')]}), 0)<CR>
+endif
 
 """"""""""""""""""""""""""""
 " gitgutter configuration
