@@ -790,9 +790,11 @@ function! s:CustomizeCppHighlight()
     hi link StorageClass Keyword
 
     " Structure normally links to Type.
+    " Edit: not in onedark. Commented out below, because specSection links to Structure, and it caused rpm spec sections
+    " be poorly visible.
     " YCM_HL_modifier is mapped to Keyword.
-    hi clear Structure
-    hi link Structure Keyword
+    "hi clear Structure
+    "hi link Structure Keyword
     hi clear cppModifier
     hi link cppModifier Keyword
 endfunction
