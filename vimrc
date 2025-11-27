@@ -1399,6 +1399,11 @@ nmap <leader>/ <Plug>localsearch_toggle
 " fzf.vim configuration
 "let g:fzf_command_prefix = 'Fzf'
 
+function! s:AddCwordAsQuery(fzf_args)
+    let a:fzf_args['options'] = ['--query', expand('<cword>')]
+    return a:fzf_args
+endfunction
+
 " mappings
 if PlugLoaded('fzf.vim')
     "nnoremap <leader>fl :Lines<CR>
@@ -1408,8 +1413,10 @@ if PlugLoaded('fzf.vim')
 
     " Search for files in git repo:
     nmap <C-p> :GFiles<CR>
-    " Search for word under cursor, but in git files list. As above but it starts finder with a word under cursor.
-    nmap <silent> <leader>T :call fzf#vim#gitfiles('', fzf#vim#with_preview({'options': ['--query', expand('<cword>')]}), 0)<CR>
+    " As above but it starts finder with a word under cursor.
+    nmap <silent> <leader>F :call fzf#vim#gitfiles('', fzf#vim#with_preview(<SID>AddCwordAsQuery({})), 0)<CR>
+    " Same but for :Tags.
+    nmap <silent> <leader>T :call fzf#vim#tags('', fzf#vim#with_preview(<SID>AddCwordAsQuery({ "placeholder": "--tag {2}:{-1}:{3..}" })), 0)<CR>
 endif
 
 """"""""""""""""""""""""""""
