@@ -105,13 +105,14 @@ endif
 " * in nerdtree window, as a workaround for the following issue: when hitting Enter on a file, it doesn't trigger
 "   WinLeave and &cursorline is kept set in nerdtree window even though it is no longer the current window
 " * in other unlisted buffers, such as vim-ctrlspace window, but enable it for vim help and man buffers
-function s:SetCursorLine()
+function! s:SetCursorLine()
     if &diff || ( ! &buflisted && &filetype != "help"  && &filetype != "man" )
         set nocursorline
     else
         set cursorline
     endif
 endfunction
+
 augroup CursorLine
     autocmd!
     autocmd WinLeave * set nocursorline
@@ -482,7 +483,7 @@ endif
 """"""""""""""""""""""""""""
 " useful functions
 
-function s:HighlightCurrentFunctionName()
+function! s:HighlightCurrentFunctionName()
     let l:tag_name = tagbar#currenttag('%s','','','scoped-stl')
     let l:tag_name = substitute(l:tag_name, '()', '', '')
     if l:tag_name == ''
@@ -505,11 +506,11 @@ function s:HighlightCurrentFunctionName()
     endif
 endfunction
 
-function s:HighlightPopulateLocationList()
+function! s:HighlightPopulateLocationList()
     execute 'lvimgrep /\v('. HiList()->map({i,v -> v.pattern})->join('\v|'). '\v)/gj %'
 endfunction
 
-function s:SmartHome()
+function! s:SmartHome()
     " this line checks if we are not on the first whitespace.
     if col('.') != match(getline('.'), '\S')+1
         norm ^
@@ -522,7 +523,7 @@ endfunction
 " Assumptions about C++ style:
 " - { is at the first column on its own line
 " - line before contains closing parens of a method parameter list
-function s:JumpPrevMethodCpp()
+function! s:JumpPrevMethodCpp()
     " Jump to previous { in the first column, move line up and to the first column.
     " But first move line down: if user is already on { then we don't want [[ to jump to previous method.
     " This only addresses a case when user presses [[ first and then [m. If cursor is already in params list, user may
@@ -533,7 +534,7 @@ endfunction
 
 " Assuming cursor is in a line with closing parens of C++ function/method parameter list, in the first column, jump to
 " function's name.
-function s:JumpToMethodNameCpp()
+function! s:JumpToMethodNameCpp()
     let l:line = getline('.')
 
     let l:comment_pos = stridx(l:line, '//')
@@ -552,7 +553,7 @@ function s:JumpToMethodNameCpp()
     endif
 endfunction
 
-function s:JumpNextMethodCpp()
+function! s:JumpNextMethodCpp()
     " This one is more tricky: if we are on a method's name, then ]] will send us to opening bracket of current method,
     " not to the next one. We need to reverse last steps of JumpPrevMethodCpp: move to next word, see if it's an opening
     " parens and if so, jump to matching closing parens and move line down, which is supposed to be the line with
@@ -682,7 +683,7 @@ command! -nargs=1 Title call <SID>Title(<q-args>)
 " command (which calls rg for me) and for some custom search pattern generation, do it like:
 " :exe '!generate_search_patterns.sh % > _patterns.tmp' | lgrep -f _patterns.tmp
 " to recursively search current directory for some patterns generated from current file.
-function GenericGrepFun(grep_cmd, grep_args)
+function! GenericGrepFun(grep_cmd, grep_args)
     let l:old_grepprg = &grepprg
     let &grepprg = a:grep_cmd
     let l:old_grepformat = &grepformat
@@ -695,13 +696,13 @@ function GenericGrepFun(grep_cmd, grep_args)
 endfunction
 
 " version-control-system aware grep, has -n implied
-function s:VcsgrepFun(grep_args)
+function! s:VcsgrepFun(grep_args)
     call GenericGrepFun("vcsgrep", a:grep_args)
 endfunction
 
 " in git repo typically this is faster
 " UPDATE: but in Strike engine repo for some reason it became slow, use vcsgrep instead.
-function s:GitGrepFun(grep_args)
+function! s:GitGrepFun(grep_args)
     call GenericGrepFun("git grep -n", a:grep_args)
 endfunction
 
