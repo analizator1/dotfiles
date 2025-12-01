@@ -15,7 +15,7 @@
   #pager = less -FXRS -x4
   #pager = diff-so-fancy | less -FXRS -x4
   # Fedora 20 compatible
-  pager = ~/scripts/diff-highlight
+  pager = ~/sachanowicz/scripts/diff-highlight
 
   whitespace=trailing-space,cr-at-eol,tabwidth=4 # indent-with-non-tab
   preloadindex = true

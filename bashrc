@@ -90,8 +90,8 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-if [ -d "$HOME/scripts" ] ; then
-    PATH="$HOME/scripts:$PATH"
+if [ -d "$HOME/sachanowicz/scripts" ] ; then
+    PATH="$HOME/sachanowicz/scripts:$PATH"
 fi
 
 if [ -d "$HOME/.local/bin" ] ; then
