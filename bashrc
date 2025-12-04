@@ -315,8 +315,12 @@ if [ -f ~/.bashrc_gitconfig ]; then
 fi
 
 # fix for eclipse under xpra
+# It's no longer needed. In fact, necessary environment variables are set in a program started by xpra itself, such as
+# when using "xpra start --start=xterm", then xterm has proper env vars.
 #export GTK_IM_MODULE=ibus
-
+# For the reason described above, not all programs work properly when started from ssh session with only DISPLAY set.
+# One example is xreader, which has a delay of a few seconds when started from a bare ssh terminal.
+# Nevertheless, below allows to run programs under xpra, by using just ssh session.
 # First check for xpra sessions, then x2go. Reason: Chrome renders slowly under x2go.
 # Ignore existing DISPLAY (unless it is :0 which means desktop X session), which may be orphaned, as GNU screen keeps
 # env vars from when it was started and each new window is opened with old env even if env is different at the point of

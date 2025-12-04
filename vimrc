@@ -734,6 +734,8 @@ let g:matchup_matchpref = {'cpp': {'template': 1}}
 
 " man pages displayed in vim (:Man)
 runtime ftplugin/man.vim
+" Display man pages in a vertical split by default.
+let g:ft_man_open_mode = 'vert'
 " Let 'K' display them in vim (<leader>K works always).
 set keywordprg=:Man
 " ftplugin sets it to ":Help" for bash, which doesn't show man in vim. Let's fix it:
