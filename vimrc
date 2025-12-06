@@ -6,7 +6,7 @@ if v:progname =~? "evim"
 endif
 
 let s:short_hostname = substitute(hostname(), '\..*', '', '')
-let g:is_dev_host = v:version >= 901 && $USER != 'root'
+let g:is_dev_host = v:version >= 901 && $USER != 'root' && has('python3_compiled')
 
 """"""""""""""""""""""""""""
 " When using KDE konsole:
