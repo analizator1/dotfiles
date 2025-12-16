@@ -847,6 +847,10 @@ function! s:CustomizeOnedark()
     " Tweak text color. spring-night has it too bright.
     hi Normal           ctermfg=145 guifg=#dfe0ee
     hi CursorLine       ctermbg=235 guibg=#1d2b3d
+    if g:is_dev_host
+        hi Normal guibg=#081b36
+        hi CursorLine guibg=#12233f
+    endif
 
     " active tab page label
     hi TabLineSel term=bold ctermfg=145 ctermbg=235 guifg=#dfe0ee guibg=#3a4b5c
