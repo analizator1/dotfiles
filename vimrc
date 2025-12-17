@@ -741,8 +741,9 @@ set keywordprg=:Man
 " ftplugin sets it to ":Help" for bash, which doesn't show man in vim. Let's fix it:
 autocmd FileType sh setlocal keywordprg=:Man
 " Fix searching for \<fd\> in man page of mmap.
-autocmd FileType man setlocal iskeyword-=.
-autocmd FileType man setlocal iskeyword-=:
+" Edit: commented out, as it breaks jumping to manual pages like xyz.conf with ctrl-]
+"autocmd FileType man setlocal iskeyword-=.
+"autocmd FileType man setlocal iskeyword-=:
 
 """"""""""""""""""""""""""""
 " colorscheme settings
