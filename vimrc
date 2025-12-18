@@ -720,7 +720,8 @@ nmap <leader>R :lgrep <c-r><c-w>
 
 " FIXME: investigate why # in pattern breaks it - is it expanded to alt file name?
 " Note: rg ignores files that are (incorrectly) in .gitignore but are actually tracked by git!
-if executable("rg")
+" Due to wrapper script for rg (in HOME and in PATH) we should check if real rg is installed.
+if executable("/usr/bin/rg") || executable("/usr/local/bin/rg")
     set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
     set grepformat=%f:%l:%c:%m
 elseif executable("vcsgrep")
