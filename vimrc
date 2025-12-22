@@ -1324,12 +1324,14 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
     let g:CtrlSpaceStatuslineFunction = "airline#extensions#ctrlspace#statusline()"
 
     function! GetFugitiveCmd()
-        let l:git_cmd = get(FugitiveResult(@%), "args", [])
-        if !empty(l:git_cmd)
-            return "[:Git " . join(l:git_cmd) . "]"
-        else
+        if &filetype != "git"
             return ""
         endif
+        let l:git_cmd = get(FugitiveResult(@%), "args", [])
+        if empty(l:git_cmd)
+            return ""
+        endif
+        return "[:Git " . join(l:git_cmd) . "]"
     endfunction
 
     " Note: don't try to modify highlight groups (like airline_x), they're controlled by airline theme and any changes are
