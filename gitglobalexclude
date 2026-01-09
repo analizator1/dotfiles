@@ -14,3 +14,7 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 __pycache__/
+
+# scripts kept inside some repos (inside in order to use settings from ~/ycm_global_extra_conf.py for given project) but
+# that can't be added to .gitignore nor to .git/info/exclude (because it's managed by build system)
+KSach_scripts/
