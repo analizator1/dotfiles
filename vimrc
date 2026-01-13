@@ -451,10 +451,12 @@ else
     " FIXME: disabled for now, due to some issues:
     " - sometimes it pulses slowly (when jumping with gb)
     " - after 'n' it swallows ctrl-w if pressed immediately after, thus disturbing window switching
+    " - UPDATE: vim seems to generally swallow ctrl-w (and generate a beep) if it is pressed very quickly after ctrl-w_s (split current window
+    "   in two). One use case is ctrl-w s ctrl-w T (split window and move the split to a new tab page).
     " With vim 802 there are some errors with <f11> and <f12>
-    if v:version >= 901
-        Plug 'inside/vim-search-pulse'
-    endif
+    "if v:version >= 901
+    "    Plug 'inside/vim-search-pulse'
+    "endif
 
     Plug 'junegunn/vim-easy-align'
 
