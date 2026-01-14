@@ -472,6 +472,9 @@ else
         Plug 'rhysd/vim-healthcheck'
     endif
 
+    " For python projects, LSP (as with YouCompleteMe) still isn't very good, and ctags is sometimes needed.
+    Plug 'ludovicchabant/vim-gutentags'
+
     call plug#end()
 
     function! PlugLoaded(name)
