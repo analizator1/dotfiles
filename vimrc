@@ -128,11 +128,10 @@ if v:version >= 802
     set relativenumber               " relative line numbering
     set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
-    " commented out: let's not use inline:word for now, as it doesn't work very well
-    "if index(split(&diffopt, ","), "inline:simple") != -1
-    "    set diffopt-=inline:simple
-    "    set diffopt+=inline:word
-    "endif
+    if index(split(&diffopt, ","), "inline:simple") != -1
+        set diffopt-=inline:simple
+        set diffopt+=inline:word
+    endif
 endif
 if v:version >= 901
     " If someone comments out a lot of lines with # or // comments, then this setting makes Vim highlight only the
