@@ -126,7 +126,8 @@ augroup END
 set diffopt+=vertical
 if v:version >= 802
     set relativenumber               " relative line numbering
-    set diffopt+=algorithm:patience
+    " Disable, patience sometimes makes diff larger. Default is myers.
+    "set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
     " use inline:word
     if index(split(&diffopt, ","), "inline:simple") != -1
