@@ -128,8 +128,13 @@ if v:version >= 802
     set relativenumber               " relative line numbering
     set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
+    " use inline:word
     if index(split(&diffopt, ","), "inline:simple") != -1
         set diffopt-=inline:simple
+        set diffopt+=inline:word
+    endif
+    if index(split(&diffopt, ","), "inline:char") != -1
+        set diffopt-=inline:char
         set diffopt+=inline:word
     endif
 endif
