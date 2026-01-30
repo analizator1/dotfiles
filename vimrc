@@ -129,7 +129,11 @@ if v:version >= 802
     " Disable, patience sometimes makes diff larger. Default is myers.
     "set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
-    " use inline:word
+
+    " Use inline:word, as inline:char finds too much details, like small renames of identifiers. If 'inline:' is not
+    " present, then inline:simple is selected. Sometimes however there is too much clutter with inline differences
+    " highlighted. They can be disabled by:
+    "  set diffopt+=inline:none
     if index(split(&diffopt, ","), "inline:simple") != -1
         set diffopt-=inline:simple
         set diffopt+=inline:word
@@ -140,8 +144,13 @@ if v:version >= 802
     endif
 endif
 if v:version >= 901
-    " If someone comments out a lot of lines with # or // comments, then this setting makes Vim highlight only the
-    " comment sign as changed (needs 'inline' option too).
+    " If someone comments out a lot of lines (with # or //) and additionally inserts a few lines, then this setting
+    " ensures Vim highlights only the comment signs as changed (but it needs 'inline' option too).
+    " Note that sometimes this might interfere with inline highlights and cause them to be less precise. That's the case
+    " when for example there are two similar lines in a new version, but only one in the old, and unchanged things that
+    " were in the same line are spread in multiple lines. 'inline' seems to handle it and choose a better matching, but
+    " linematch may spoil it by highlighting something as changed in new version which would not be highlighted
+    " otherwise. But overall linematch does a good job and is especially helpful if inline:none is NOT used.
     set diffopt+=linematch:300
 endif
 
