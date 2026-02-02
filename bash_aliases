@@ -23,14 +23,15 @@ alias zegrep='zegrep --color=auto'
 
 # Set terminal title for long running commands.
 alias sleep="terminal_title_wrapper sleep"
-alias man="terminal_title_wrapper man"
+# Commented out: when MANPAGER is set to run vim, then this line breaks ctrl-z behavior for this vim instance.
+#alias man="terminal_title_wrapper man"
 alias vcsgrep="terminal_title_wrapper vcsgrep"
 alias make="terminal_title_wrapper make"
 
-#alias git="terminal_title_wrapper git"
-
-# do not connect to X server
-alias vim="vim -X"
+if command -v vim >/dev/null; then
+	# do not connect to X server
+	alias vim="vim -X"
+fi
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

@@ -4,4 +4,7 @@
 if exists('g:loaded_youcompleteme')
     " Disable YCM in vim-fugitive buffers
     let g:ycm_filetype_blacklist['git'] = 1
+    " And also in man buffers, when run from shell and MANPAGER is set to run vim.
+    " Something breaks in "~/.vim/plugged/YouCompleteMe/third_party/ycmd/ycmd/utils.py", line 187, in GetUnusedLocalhostPort.
+    "let g:ycm_filetype_blacklist['man'] = 1
 endif

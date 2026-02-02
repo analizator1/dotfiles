@@ -370,7 +370,7 @@ if v:version < 800
 
 else
 
-    call plug#begin()
+    silent! call plug#begin()
 
     Plug 'preservim/nerdtree'
     Plug 'preservim/tagbar'
@@ -1212,10 +1212,12 @@ endif
 " choose a colorscheme
 
 " Note: this must be after prop_type_add() calls
-colorscheme onedark
-"colorscheme edge
-"colorscheme everforest
-"colorscheme spring-night
+if PlugLoaded('onedark.vim')
+    colorscheme onedark
+    "colorscheme edge
+    "colorscheme everforest
+    "colorscheme spring-night
+endif
 
 """"""""""""""""""""""""""""
 " vim-asterisk configuration

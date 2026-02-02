@@ -305,7 +305,10 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export LESS="-RS"
 export SYSTEMD_LESS="RS"
 
-export EDITOR=vim
+if command -v vim >/dev/null; then
+    export MANPAGER="vim +MANPAGER --not-a-term -"
+    export EDITOR=vim
+fi
 
 # There are systems which disable this:
 stty susp ^z

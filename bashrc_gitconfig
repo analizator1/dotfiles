@@ -1,4 +1,6 @@
-if which --skip-alias git &>/dev/null; then
+# It turns out --skip-alias is not present in 'which' on Ubuntu-based systems.
+#if which --skip-alias git &>/dev/null; then
+if command -v git >/dev/null; then
     git_config()
     {
         local name=$1
@@ -14,4 +16,6 @@ if which --skip-alias git &>/dev/null; then
     git_config color.ui "auto"
 
     unset git_config
+else
+    echo ".bashrc_gitconfig: git is not installed"
 fi
