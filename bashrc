@@ -306,8 +306,11 @@ export LESS="-RS"
 export SYSTEMD_LESS="RS"
 
 if command -v vim >/dev/null; then
-    export MANPAGER="vim +MANPAGER --not-a-term -"
     export EDITOR=vim
+    # Something is incorrectly displayed in Vim 8.2.
+    if [[ $(vim --version | head -1) =~ Vi\ IMproved\ 9\. ]]; then
+        export MANPAGER="vim +MANPAGER --not-a-term -"
+    fi
 fi
 
 # There are systems which disable this:
