@@ -204,6 +204,7 @@ if has("autocmd")
     autocmd BufNewFile,BufRead *.strace set filetype=strace
     autocmd BufNewFile,BufRead *.ts set filetype=javascript
     autocmd BufNewFile,BufRead *.rdl set filetype=systemrdl
+    autocmd BufNewFile,BufRead *.mac set filetype=maxima
 
     " add an option to wrap long lines during inserting, because it gets deleted
     " in a C indent plugin
