@@ -798,9 +798,10 @@ function! s:CustomizeHighlightGeneric()
     " With vim-matchup, highlight of matching parenthesis can be confusing (it is kind of reverse of normal colors).
     " Especially with block cursor! Moreover, xml tags that are open-close (like <arg code="..." .. />) are highlighted
     " whole, which is distracting.
-    " Edit: onedark has a reasonable setting.
     "hi clear MatchParen
     ""hi MatchParen term=underline cterm=underline gui=underline
+    " Edit: onedark has a reasonable setting (underline), though let's not change foreground color, as it shadows syntax highlight.
+    hi MatchParen ctermfg=NONE guifg=NONE
     "" Alternatively let's link to Search.
     "hi link MatchParen Search
 
