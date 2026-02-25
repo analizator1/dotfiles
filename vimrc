@@ -205,6 +205,8 @@ if has("autocmd")
     autocmd BufNewFile,BufRead *.ts set filetype=javascript
     autocmd BufNewFile,BufRead *.rdl set filetype=systemrdl
     autocmd BufNewFile,BufRead *.mac set filetype=maxima
+    " Use xml, as the default jsp (and also xhtml) have problems with indenting by '='.
+    " xhtml is slightly better, as it recognizes syntax of embedded CSS.
     autocmd BufNewFile,BufRead *.jsp set filetype=xml
     autocmd BufNewFile,BufRead *.jspf set filetype=xml
 
