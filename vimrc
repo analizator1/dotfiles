@@ -864,8 +864,8 @@ function! s:CustomizeOnedark()
     hi link cDefine Conditional
 
     " Swap these two.
-    hi IncSearch term=reverse ctermfg=235 ctermbg=180 guifg=#282C34 guibg=#E5C07B
-    hi Search term=reverse ctermfg=180 ctermbg=59 guifg=#E5C07B guibg=#5C6370
+    "hi IncSearch term=reverse ctermfg=235 ctermbg=180 guifg=#282C34 guibg=#E5C07B
+    "hi Search term=reverse ctermfg=180 ctermbg=59 guifg=#E5C07B guibg=#5C6370
 
     " More contrast for comments. Taken from spring-night.
     " Note: by default it is:
