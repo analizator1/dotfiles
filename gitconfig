@@ -1,4 +1,4 @@
-# vim: sw=2
+# vim: sw=2:ts=2
 [color]
   ui = auto
   branch = auto
@@ -13,9 +13,9 @@
   #    Basically it leaves data in terminal, rather than making it disappear.
   # -F "Causes less to automatically exit if the entire file can be displayed on the first screen."
   #pager = less -FXRS -x4
-  #pager = diff-so-fancy | less -FXRS -x4
-  # Fedora 20 compatible
-  pager = ~/sachanowicz/scripts/diff-highlight
+  pager = diff-so-fancy | less -FXRS -x4
+  # A wrapper script for diff-highlight with a fallback.
+  #pager = ~/sachanowicz/scripts/diff-highlight | less -FXRS -x4
 
   whitespace=trailing-space,cr-at-eol,tabwidth=4 # indent-with-non-tab
   preloadindex = true
@@ -100,3 +100,10 @@
 	rebase = false
 [gc]
 	autoDetach = false
+[diff-so-fancy]
+  # Defaults to true. Setting it to false was a (failed) attempt to fix "ping_-c_2_cezary.txt" being showed in hunk
+  # headers in:
+  #  cat ~/Downloads/smh-2158_normal_rec.diff | diff-so-fancy | less
+  # Another error there is that it thinks that ping_-c_2_cezary.txt was renamed, but it was just a recursive diff in 2
+  # directories, and this file wasn't renamed.
+	changeHunkIndicators = true
