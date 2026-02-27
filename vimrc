@@ -209,6 +209,8 @@ if has("autocmd")
     " xhtml is slightly better, as it recognizes syntax of embedded CSS.
     autocmd BufNewFile,BufRead *.jsp set filetype=xml
     autocmd BufNewFile,BufRead *.jspf set filetype=xml
+    " This works better with vim-simpletemplate plugin.
+    autocmd BufNewFile,BufRead *.tpl set filetype=html
 
     " add an option to wrap long lines during inserting, because it gets deleted
     " in a C indent plugin
@@ -500,6 +502,9 @@ else
 
     " For python projects, LSP (as with YouCompleteMe) still isn't very good, and ctags is sometimes needed.
     Plug 'ludovicchabant/vim-gutentags'
+
+    " For .tpl files with bottle SimpleTemplate syntax.
+    Plug 'gbishop/vim-simpletemplate'
 
     call plug#end()
 
