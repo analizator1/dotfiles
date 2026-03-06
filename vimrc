@@ -770,8 +770,9 @@ nmap <leader>R :lgrep <c-r><c-w>
 if executable("/usr/bin/rg") || executable("/usr/local/bin/rg")
     set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
     set grepformat=%f:%l:%c:%m
-elseif executable("vcsgrep")
-    set grepprg=vcsgrep
+" Commented out: vcsgrep has different arguments for paths, and cannot be considered a substitute for rg.
+"elseif executable("vcsgrep")
+"    set grepprg=vcsgrep
 endif
 
 """"""""""""""""""""""""""""
