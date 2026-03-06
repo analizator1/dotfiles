@@ -432,7 +432,8 @@ else
         " Also, function signature popup seems to work better in YCM.
         " vim-lsp seems to do some computations (maybe calls to language server) synchronously during typing. When coding
         " it causes Vim to freeze for about a second every few written words (even when writing a comment).
-        let s:prefer_ycm = v:true
+        " March 2026: let's give vim-lsp another chance
+        let s:prefer_ycm = v:false
         if s:prefer_ycm
             Plug 'ycm-core/YouCompleteMe'
         else
@@ -511,7 +512,7 @@ else
     endif
 
     " For python projects, LSP (as with YouCompleteMe) still isn't very good, and ctags is sometimes needed.
-    Plug 'ludovicchabant/vim-gutentags'
+    "Plug 'ludovicchabant/vim-gutentags'
 
     " For .tpl files with bottle SimpleTemplate syntax.
     Plug 'gbishop/vim-simpletemplate'
@@ -1164,20 +1165,54 @@ if PlugLoaded('vim-lsp')
         \}
     else
         " Register LSP servers manually.
+        " Without 'workspace_config', ':verbose LspStatus' fails with an error.
+        " More info: https://blog.cskr.dev/posts/python-pylsp-vim-uv/
         if executable(s:clangd_command[0])
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'clangd',
                 \ 'cmd': s:clangd_command + s:clangd_common_args,
                 \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
+                \ 'workspace_config': {},
                 \ })
         endif
 
-        if executable('pylsp')
+        " For now disabling ty:
+        " * It fails to recognize instance memebers typed in __init__() as X | None are actually not Note in other
+        "   methods, because they are called from a method that initializes the member with instance of X.
+        " * In one method it prints a diagnostic error that a variable is A | None where in fact it was initialized to
+        "   an instance of A a few lines above. Even hovering on the variable reveals that it is of type A.
+        "if executable('ty')
+        if v:false
+            " pip install ty
+            " extra python paths can be defined in pyproject.toml, see https://docs.astral.sh/ty/reference/configuration/#extra-paths
+            au User lsp_setup call lsp#register_server({
+                \ 'name': 'ty',
+                \ 'cmd': ['ty', 'server'],
+                \ 'allowlist': ['python'],
+                \ 'workspace_config': {},
+                \ })
+        elseif executable('pylsp')
+
+            function! s:PyLspConfig(server_info)
+                "echomsg "KS DEBUG: PyLspConfig: server_info: " . string(a:server_info)
+                "echomsg "KS DEBUG: PyLspConfig: cwd=" . getcwd()
+                let l:extra_paths = []
+                if getcwd() =~ 'ostTesting'
+                    let l:extra_paths = ['../build/scripts', '../functionalTesting/scripts', '../coolkit/src/scripts',
+                                \ 'systemTests/lib', 'systemTests']
+                endif
+                return {'pylsp': {'plugins': {'jedi': {'extra_paths': l:extra_paths}}}}
+            endfunction
+
             " pip install python-lsp-server
+            " 'cmd': ['pylsp', '-v', '--log-file', 'pylsp.log'],
+            " Note that pylsp is affected by this issue: Jedi does not recognise type parameter lists. #2025
+            " https://github.com/davidhalter/jedi/issues/2025
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'pylsp',
-                \ 'cmd': {server_info->['pylsp']},
+                \ 'cmd': ['pylsp'],
                 \ 'allowlist': ['python'],
+                \ 'workspace_config': function('s:PyLspConfig'),
                 \ })
         endif
     endif
