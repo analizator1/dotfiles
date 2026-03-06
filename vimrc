@@ -14,6 +14,15 @@ if index(v:argv, '+MANPAGER') != -1
     " disable it:
     let g:is_dev_host = v:false
 endif
+if s:short_hostname =~ '^beta'
+    " strace on vim writing a file revealed that fsync() can take ~3.5s, adding a visible lag.
+    "openat(AT_FDCWD, "path_to_file", O_WRONLY|O_CREAT, 0644) = 20 <0.000148>
+    "...
+    "fsync(20)                               = 0 <3.562885>
+    "...
+    "close(20)                               = 0 <0.000092>
+    set nofsync
+endif
 
 """"""""""""""""""""""""""""
 " When using KDE konsole:
