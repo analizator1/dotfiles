@@ -220,6 +220,7 @@ if has("autocmd")
     autocmd BufNewFile,BufRead *.jspf set filetype=xml
     " This works better with vim-simpletemplate plugin.
     autocmd BufNewFile,BufRead *.tpl set filetype=html
+    autocmd BufNewFile,BufRead *.lt set filetype=xml
 
     " add an option to wrap long lines during inserting, because it gets deleted
     " in a C indent plugin
