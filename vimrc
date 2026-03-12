@@ -1176,13 +1176,7 @@ if PlugLoaded('vim-lsp')
                 \ })
         endif
 
-        " For now disabling ty:
-        " * It fails to recognize instance memebers typed in __init__() as X | None are actually not Note in other
-        "   methods, because they are called from a method that initializes the member with instance of X.
-        " * In one method it prints a diagnostic error that a variable is A | None where in fact it was initialized to
-        "   an instance of A a few lines above. Even hovering on the variable reveals that it is of type A.
-        "if executable('ty')
-        if v:false
+        if executable('ty')
             " pip install ty
             " extra python paths can be defined in pyproject.toml, see https://docs.astral.sh/ty/reference/configuration/#extra-paths
             au User lsp_setup call lsp#register_server({
