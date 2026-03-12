@@ -440,9 +440,11 @@ else
             Plug 'prabirshrestha/vim-lsp'
 
             " Auto registration of LSP servers.
-            " FIXME: vim-lsp-settings is commented out: clangd was started twice in a scenario when you start vim with only cpp
+            " FIXME: with vim-lsp-settings: clangd was started twice in a scenario when you start vim with only cpp
             " files (it's just one clangd) and you open a .c file (now there are 2 clangd instances running).
-            "Plug 'mattn/vim-lsp-settings'
+            " FIXME: with vim-lsp, even without vim-lsp-settings, ty server fails at start, it seems to be started
+            " multiple times when loading a workspace (with a lot of files) with vim-ctrlspace.
+            Plug 'mattn/vim-lsp-settings'
 
             Plug 'prabirshrestha/asyncomplete.vim'
             Plug 'prabirshrestha/asyncomplete-lsp.vim'
@@ -1156,15 +1158,46 @@ if PlugLoaded('vim-lsp')
             \ exepath("clangd")
         \ ]
 
+    function! s:PyLspConfig(server_info)
+        "echomsg "KS DEBUG: PyLspConfig: server_info: " . string(a:server_info)
+        "echomsg "KS DEBUG: PyLspConfig: cwd=" . getcwd()
+        let l:extra_paths = []
+        if getcwd() =~ 'ostTesting'
+            let l:extra_paths = ['../build/scripts', '../functionalTesting/scripts', '../coolkit/src/scripts',
+                        \ 'systemTests/lib', 'systemTests']
+        endif
+        return {'pylsp': {'plugins': {'jedi': {'extra_paths': l:extra_paths}}}}
+    endfunction
+
     if PlugLoaded('vim-lsp-settings')
+        " Register LSP servers automatically.
+        " Key in this dictionary is the name of LSP server as listed here:
+        " https://github.com/mattn/vim-lsp-settings#supported-languages
         let g:lsp_settings = {
             \ 'clangd': {
                 \ 'cmd': s:clangd_command + s:clangd_common_args
             \ },
-            \ 'efm-langserver': {'disabled': v:true}
+            \ 'pylsp-all': {
+                \ 'workspace_config': function('s:PyLspConfig'),
+            \},
+            \ 'efm-langserver': {'disabled': v:true},
         \}
+
+        " Preferred LSP servers. Value can also be a list.
+        " Use jdt.ls, same as YCM. It clams that it needs JDK 17, but JDK 21 also works. JDK 25 does not work.
+        " With jdt.ls installed by vim-lsp, it does not work with JDK 17, it requires JDK 21. Logs are stored under:
+        " ~/.local/share/vim-lsp-settings/servers/eclipse-jdt-ls/config_linux/
+        " So, to support both:
+        " sudo apt install openjdk-21-jdk
+        let g:lsp_settings_filetype_java = 'eclipse-jdt-ls'
+
+        let g:lsp_settings_filetype_python = 'ty'
+        "let g:lsp_settings_filetype_python = 'pylsp-all'
+
     else
         " Register LSP servers manually.
+        " FIXME: add an entry for eclipse-jdt-ls.
+
         " Without 'workspace_config', ':verbose LspStatus' fails with an error.
         " More info: https://blog.cskr.dev/posts/python-pylsp-vim-uv/
         if executable(s:clangd_command[0])
@@ -1186,17 +1219,6 @@ if PlugLoaded('vim-lsp')
                 \ 'workspace_config': {},
                 \ })
         elseif executable('pylsp')
-
-            function! s:PyLspConfig(server_info)
-                "echomsg "KS DEBUG: PyLspConfig: server_info: " . string(a:server_info)
-                "echomsg "KS DEBUG: PyLspConfig: cwd=" . getcwd()
-                let l:extra_paths = []
-                if getcwd() =~ 'ostTesting'
-                    let l:extra_paths = ['../build/scripts', '../functionalTesting/scripts', '../coolkit/src/scripts',
-                                \ 'systemTests/lib', 'systemTests']
-                endif
-                return {'pylsp': {'plugins': {'jedi': {'extra_paths': l:extra_paths}}}}
-            endfunction
 
             " pip install python-lsp-server
             " 'cmd': ['pylsp', '-v', '--log-file', 'pylsp.log'],
