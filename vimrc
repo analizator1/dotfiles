@@ -1158,15 +1158,32 @@ if PlugLoaded('vim-lsp')
             \ exepath("clangd")
         \ ]
 
-    function! s:PyLspConfig(server_info)
-        "echomsg "KS DEBUG: PyLspConfig: server_info: " . string(a:server_info)
-        "echomsg "KS DEBUG: PyLspConfig: cwd=" . getcwd()
+    function! s:PyLspConfig(server_name, key)
         let l:extra_paths = []
         if getcwd() =~ 'ostTesting'
             let l:extra_paths = ['../build/scripts', '../functionalTesting/scripts', '../coolkit/src/scripts',
                         \ 'systemTests/lib', 'systemTests']
         endif
         return {'pylsp': {'plugins': {'jedi': {'extra_paths': l:extra_paths}}}}
+    endfunction
+
+    function! s:PerlnavigatorConfig(server_name, key)
+        "echomsg "KS DEBUG: PerlnavigatorConfig: server_name: " . string(a:server_name)
+        "echomsg "KS DEBUG: PerlnavigatorConfig: key: " . string(a:key)
+        "echomsg "KS DEBUG: PerlnavigatorConfig: cwd=" . getcwd()
+        let l:extra_paths = []
+        if getcwd() =~ 'hydragui'
+            let l:extra_paths = ['src_Mgmt/lib/perl']
+        endif
+        return {'perlnavigator': {'includePaths': l:extra_paths}}
+    endfunction
+
+    function! s:PerlLanguageServerConfig(server_name, key)
+        let l:extra_paths = []
+        if getcwd() =~ 'hydragui'
+            let l:extra_paths = ['src_Mgmt/lib/perl']
+        endif
+        return {'perl': {'perlInc': l:extra_paths}}
     endfunction
 
     if PlugLoaded('vim-lsp-settings')
@@ -1179,9 +1196,15 @@ if PlugLoaded('vim-lsp')
             \ },
             \ 'pylsp-all': {
                 \ 'workspace_config': function('s:PyLspConfig'),
-            \},
+            \ },
+            \ 'perlnavigator': {
+                \ 'workspace_config': function('s:PerlnavigatorConfig'),
+            \ },
+            \ 'perl-languageserver': {
+                \ 'workspace_config': function('s:PerlLanguageServerConfig'),
+            \ },
             \ 'efm-langserver': {'disabled': v:true},
-        \}
+        \ }
 
         " Preferred LSP servers. Value can also be a list.
         " Use jdt.ls, same as YCM. It clams that it needs JDK 17, but JDK 21 also works. JDK 25 does not work.
@@ -1193,6 +1216,11 @@ if PlugLoaded('vim-lsp')
 
         let g:lsp_settings_filetype_python = 'ty'
         "let g:lsp_settings_filetype_python = 'pylsp-all'
+
+        " npm install -g perlnavigator-server
+        "let g:lsp_settings_filetype_perl = 'perlnavigator'
+        " Install it according to https://github.com/richterger/Perl-LanguageServer
+        let g:lsp_settings_filetype_perl = 'perl-languageserver'
 
     else
         " Register LSP servers manually.
