@@ -1419,6 +1419,13 @@ nmap <leader>cb <Plug>(conflict-marker-both)
 nmap <leader>cB <Plug>(conflict-marker-both-rev)
 
 """"""""""""""""""""""""""""
+" vim-fugitive configuration
+" Disable it for now, as hgit is slow.
+"if executable('hgit')
+"    let g:fugitive_git_executable = [exepath('hgit')]
+"endif
+
+""""""""""""""""""""""""""""
 " airline configuration
 
 if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
