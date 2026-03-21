@@ -7,7 +7,8 @@ endif
 
 let s:short_hostname = substitute(hostname(), '\..*', '', '')
 let g:is_dev_host = v:version >= 901 && $USER != 'root' && has('python3_compiled')
-if index(v:argv, '+MANPAGER') != -1
+" Vim 8.0 does not have v:argv.
+if exists('v:argv') && index(v:argv, '+MANPAGER') != -1
     " When vim is started by man as set in $MANPAGER:
     " AppArmor has a special profile for man (see /etc/apparmor.d/usr.bin.man) which denies basic network operations
     " like creating a socket(AF_INET, SOCK_STREAM, IPPROTO_IP). This make YouCompleteMe report an error at start. Let's
