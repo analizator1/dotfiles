@@ -1,7 +1,9 @@
 *.sw?
 .idea/
+.vscode/
 .cproject
 .project
+.classpath
 .settings/
 tags
 .gdb_history
