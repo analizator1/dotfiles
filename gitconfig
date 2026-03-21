@@ -63,7 +63,15 @@
   lg = log --stat --summary -M --decorate
   logs = log --pretty=format:'%h %an %ad%x09%s' --date=iso
   logmaster = log origin/master..HEAD
+  # Generalize above: log local changes relative to the upstream branch, in case it is different than origin/master.
+  # From git-rev-parse manual:
+  # @
+  #     @ alone is a shortcut for HEAD.
+  # [<branchname>]@{upstream}, e.g. master@{upstream}, @{u}
+  #     This one is for branch's upstream.
+  logm = log @{u}..@
   diffmaster = diff origin/master...HEAD
+  diffm = diff @{u}...@
   # https://stackoverflow.com/questions/12776015/git-alias-with-variables-not-working-as-expected-pathspec-did-not-match-any-fil
   diffmaster-no-testbenches = "!f() { git diff origin/master...HEAD "$@" -- ':!*_tb*' ':!*cocotb*'; }; f"
   cim = commit -m
