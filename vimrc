@@ -928,6 +928,10 @@ function! s:CustomizeOnedark()
     hi clear DiffChange
     hi DiffText term=reverse cterm=reverse ctermfg=109 gui=reverse guifg=#7fbbb3
     hi DiffChange term=bold cterm=none ctermfg=180 gui=none guifg=#7fbbb3
+
+    " theme from gitlab
+    hi DiffAdd guibg=#1f3623 guifg=NONE
+    hi DiffDelete guibg=#4a2325 guifg=NONE
 endfunction
 
 """""""" colorscheme: edge """"""""
