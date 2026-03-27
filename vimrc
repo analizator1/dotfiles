@@ -140,6 +140,20 @@ augroup CursorLine
     autocmd OptionSet diff,filetype call <SID>SetCursorLine()
 augroup END
 
+function! s:SwapCursorLineColor()
+    if exists('g:alt_cursorline_color')
+        let l:old_cursorline_attrs = hlget('CursorLine')[0]
+        if exists('l:old_cursorline_attrs.guibg')
+            let l:old_cursorline_color = l:old_cursorline_attrs.guibg
+            call hlset([#{name: 'CursorLine', guibg: g:alt_cursorline_color}])
+            let g:alt_cursorline_color = l:old_cursorline_color
+        endif
+    endif
+endfunction
+
+"nmap <silent> <C-K> :set invcursorline<CR>
+nmap <silent> <C-K> :call <SID>SwapCursorLineColor()<CR>
+
 set diffopt+=vertical
 if v:version >= 802
     set relativenumber               " relative line numbering
@@ -632,7 +646,6 @@ endfunction
 vmap Q gq
 
 nmap <silent> <C-N> :nohlsearch<CR>
-nmap <silent> <C-K> :set invcursorline<CR>
 nmap <C-j> :jumps<CR>
 
 " ctrl-left/right should work the same in insert mode as in normal
@@ -828,6 +841,10 @@ function! s:CustomizeHighlightGeneric()
     hi clear Todo
     hi link Todo Keyword
 
+    if exists('g:alt_cursorline_color')
+        unlet g:alt_cursorline_color
+    endif
+
     call s:CustomizeCppHighlight()
 endfunction
 
@@ -899,6 +916,7 @@ function! s:CustomizeOnedark()
         hi Normal guibg=#081b36
         hi CursorLine guibg=#12233f
     endif
+    let g:alt_cursorline_color = '#263e64'
 
     " active tab page label
     hi TabLineSel term=bold ctermfg=145 ctermbg=235 guifg=#dfe0ee guibg=#3a4b5c
