@@ -439,12 +439,6 @@ else
             Plug 'ycm-core/YouCompleteMe'
         else
             Plug 'prabirshrestha/vim-lsp'
-
-            " Auto registration of LSP servers.
-            " FIXME: with vim-lsp-settings: clangd was started twice in a scenario when you start vim with only cpp
-            " files (it's just one clangd) and you open a .c file (now there are 2 clangd instances running).
-            " FIXME: with vim-lsp, even without vim-lsp-settings, ty server fails at start, it seems to be started
-            " multiple times when loading a workspace (with a lot of files) with vim-ctrlspace.
             Plug 'mattn/vim-lsp-settings'
 
             Plug 'prabirshrestha/asyncomplete.vim'
@@ -1192,7 +1186,14 @@ if PlugLoaded('vim-lsp')
     endfunction
 
     if PlugLoaded('vim-lsp-settings')
-        " Register LSP servers automatically.
+        " Auto registration of LSP servers.
+
+        " We provide additional config for some servers, mostly include paths. Ideally this should be in each project's
+        " repo, but not every language server has a dedicated config file, like pyproject.toml or ty.toml for ty, see
+        " https://docs.astral.sh/ty/reference/configuration/#extra-paths
+        " Alternatively, g:lsp_settings could be tweaked in per-project vimrc, but that is not perfect since it's
+        " personal and shouldn't really be committed to the project's repo.
+
         " Key in this dictionary is the name of LSP server as listed here:
         " https://github.com/mattn/vim-lsp-settings#supported-languages
         let g:lsp_settings = {
@@ -1220,6 +1221,8 @@ if PlugLoaded('vim-lsp')
         let g:lsp_settings_filetype_java = 'eclipse-jdt-ls'
 
         let g:lsp_settings_filetype_python = 'ty'
+        " pylsp is affected by this issue: Jedi does not recognise type parameter lists. #2025
+        " https://github.com/davidhalter/jedi/issues/2025
         "let g:lsp_settings_filetype_python = 'pylsp-all'
 
         " npm install -g perlnavigator-server
@@ -1228,8 +1231,13 @@ if PlugLoaded('vim-lsp')
         let g:lsp_settings_filetype_perl = 'perl-languageserver'
 
     else
-        " Register LSP servers manually.
-        " FIXME: add an entry for eclipse-jdt-ls.
+        """ Legacy section in case vim-lsp-settings is not loaded.
+        " LSP servers need to be registered manually.
+        " This section was meant to workaround the following, but it turned out it does not solve the issue.
+        " FIXME: with vim-lsp-settings: clangd was started twice in a scenario when you start vim with only cpp
+        " files (it's just one clangd) and you open a .c file (now there are 2 clangd instances running).
+        " FIXME: with vim-lsp, even without vim-lsp-settings, ty server fails at start, it seems to be started
+        " multiple times when loading a workspace (with a lot of files) with vim-ctrlspace.
 
         " Without 'workspace_config', ':verbose LspStatus' fails with an error.
         " More info: https://blog.cskr.dev/posts/python-pylsp-vim-uv/
@@ -1244,7 +1252,6 @@ if PlugLoaded('vim-lsp')
 
         if executable('ty')
             " pip install ty
-            " extra python paths can be defined in pyproject.toml, see https://docs.astral.sh/ty/reference/configuration/#extra-paths
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'ty',
                 \ 'cmd': ['ty', 'server'],
@@ -1252,11 +1259,7 @@ if PlugLoaded('vim-lsp')
                 \ 'workspace_config': {},
                 \ })
         elseif executable('pylsp')
-
             " pip install python-lsp-server
-            " 'cmd': ['pylsp', '-v', '--log-file', 'pylsp.log'],
-            " Note that pylsp is affected by this issue: Jedi does not recognise type parameter lists. #2025
-            " https://github.com/davidhalter/jedi/issues/2025
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'pylsp',
                 \ 'cmd': ['pylsp'],
