@@ -437,6 +437,7 @@ else
     " This plugin automatically adjusts 'shiftwidth' and 'expandtab' heuristically based on the current file, or, in the
     " case the current file is new, blank, or otherwise insufficient, by looking at other files of the same type in the
     " current and parent directories.
+    " UPDATE: though it is better to use editorconfig.
     Plug 'tpope/vim-sleuth'
 
     if g:is_dev_host
@@ -447,7 +448,7 @@ else
         " Also, function signature popup seems to work better in YCM.
         " vim-lsp seems to do some computations (maybe calls to language server) synchronously during typing. When coding
         " it causes Vim to freeze for about a second every few written words (even when writing a comment).
-        " March 2026: let's give vim-lsp another chance
+        " March 2026: let's give vim-lsp another chance. It's slows down Vim a bit, but it's acceptable.
         let s:prefer_ycm = v:false
         if s:prefer_ycm
             Plug 'ycm-core/YouCompleteMe'
@@ -758,12 +759,12 @@ function! s:VcsgrepFun(grep_args)
 endfunction
 
 " in git repo typically this is faster
-" UPDATE: but in Strike engine repo for some reason it became slow, use vcsgrep instead.
 function! s:GitGrepFun(grep_args)
     call GenericGrepFun("git grep -n", a:grep_args)
 endfunction
 
 command! -nargs=1 Lvcsgrep call <SID>VcsgrepFun(<q-args>)
+" with vim-fugitive, it's better to use :Ggrep or :Glgrep.
 command! -nargs=1 Lgitgrep call <SID>GitGrepFun(<q-args>)
 
 " Grep for word under cursor.
@@ -1242,6 +1243,7 @@ if PlugLoaded('vim-lsp')
         " pylsp is affected by this issue: Jedi does not recognise type parameter lists. #2025
         " https://github.com/davidhalter/jedi/issues/2025
         "let g:lsp_settings_filetype_python = 'pylsp-all'
+        "let g:lsp_settings_filetype_python = 'basedpyright-langserver'
 
         " npm install -g perlnavigator-server
         "let g:lsp_settings_filetype_perl = 'perlnavigator'
@@ -1455,6 +1457,11 @@ nmap <leader>cB <Plug>(conflict-marker-both-rev)
 """"""""""""""""""""""""""""
 " airline configuration
 
+" Warning: the searchcount extension for vim-airline may slow down Vim significantly when moving cursor and search
+" highlight is active due to usage of searchcount() with recompute=1. Especially if the file is large or regex contains
+" alternatives (|). In this case, either:
+" * turn off search highlight: <c-n>
+" * or turn off airline with :AirlineToggle
 if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
     " disable '-- INSERT --' in the last line
     set noshowmode
