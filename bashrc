@@ -378,3 +378,9 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export PYENV_ROOT="$HOME/.pyenv"
+if [[ -d $PYENV_ROOT/bin ]]; then
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init - bash)"
+fi
