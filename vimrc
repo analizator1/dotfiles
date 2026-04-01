@@ -1425,10 +1425,11 @@ nmap gA <Plug>(EasyAlign)
 """"""""""""""""""""""""""""
 " context.vim configuration
 
-" extracted from ~/.vim/plugged/context.vim/autoload/context/settings.vim and improved to also ignore C goto labels
-" (typical in kernel code)
+" extracted from ~/.vim/plugged/context.vim/autoload/context/settings.vim and improved:
+" * to ignore C goto labels (typical in kernel code)
+" * to ignore sole EOF (maybe with a suffix) in a line, which some people use as a delimiter in here documents in bash
 "let g:context_skip_regex = '^\([<=>]\{7\}\|\s*\($\|#\|//\|/\*\|\*\($\|\s\|/\)\)\)'
-let g:context_skip_regex = '^\([<=>]\{7\}\|\s*\($\|#\|//\|/\*\|\*\($\|\s\|/\)\|\k\+:$\)\)'
+let g:context_skip_regex = '^\([<=>]\{7\}\|\s*\($\|#\|//\|/\*\|\*\($\|\s\|/\)\|\k\+:$\)\|EOF\k*$\)'
 
 """"""""""""""""""""""""""""
 " rhysd/conflict-marker.vim configuration
