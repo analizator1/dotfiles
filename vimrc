@@ -1059,6 +1059,7 @@ let s:clangd_common_args = [
 " See https://github.com/clangd/clangd/issues/1394#issuecomment-1328676884
 call add(s:clangd_common_args, '--query-driver=/usr/bin/*')
 call add(s:clangd_common_args, '--query-driver=/opt/icecream/bin/*')
+call add(s:clangd_common_args, '--query-driver=/usr/lib64/ccache/*')
 " For debugging:
 "call add(s:clangd_common_args, '--log=verbose')
 
