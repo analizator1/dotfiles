@@ -1178,10 +1178,6 @@ if PlugLoaded('vim-lsp')
 
     function! s:PyLspConfig(server_name, key)
         let l:extra_paths = []
-        if getcwd() =~ 'ostTesting'
-            let l:extra_paths = ['../build/scripts', '../functionalTesting/scripts',
-                        \ 'systemTests/lib', 'systemTests']
-        endif
         return {'pylsp': {'plugins': {
                     \ 'jedi': {
                         \ 'extra_paths': l:extra_paths,
