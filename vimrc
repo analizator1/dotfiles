@@ -735,12 +735,6 @@ endfunction
 
 command! -nargs=1 Title call <SID>Title(<q-args>)
 
-" This function can even be called directly from cmdline like:
-" :call GenericGrepFun("vcsgrep", expand("<cword>"))
-" with some custom grep-like script instead of "vcsgrep". However, it might make more sense to instead use standard grep
-" command (which calls rg for me) and for some custom search pattern generation, do it like:
-" :exe '!generate_search_patterns.sh % > _patterns.tmp' | lgrep -f _patterns.tmp
-" to recursively search current directory for some patterns generated from current file.
 function! GenericGrepFun(grep_cmd, grep_args)
     let l:old_grepprg = &grepprg
     let &grepprg = a:grep_cmd
@@ -753,31 +747,31 @@ function! GenericGrepFun(grep_cmd, grep_args)
     let &grepformat = l:old_grepformat
 endfunction
 
-" version-control-system aware grep, has -n implied
+" Legacy: version-control-system aware grep, has -n implied
 function! s:VcsgrepFun(grep_args)
     call GenericGrepFun("vcsgrep", a:grep_args)
 endfunction
+command! -nargs=1 Lvcsgrep call <SID>VcsgrepFun(<q-args>)
+" grep for word under cursor.
+nmap <silent> <leader>V z*:call <SID>VcsgrepFun(shellescape(@/))<CR>:lopen<CR>:lfirst<CR>
 
-" in git repo typically this is faster
+" Legacy: with vim-fugitive, it's better to use :Ggrep or :Glgrep.
 function! s:GitGrepFun(grep_args)
     call GenericGrepFun("git grep -n", a:grep_args)
 endfunction
-
-command! -nargs=1 Lvcsgrep call <SID>VcsgrepFun(<q-args>)
-" with vim-fugitive, it's better to use :Ggrep or :Glgrep.
 command! -nargs=1 Lgitgrep call <SID>GitGrepFun(<q-args>)
-
-" Grep for word under cursor.
-" @/ means '/' register which contains current search pattern
-" Edit: replaced *`` with z* from vim-asterisk
-nmap <silent> <leader>V z*:call <SID>VcsgrepFun(shellescape(@/))<CR>:lopen<CR>:lfirst<CR>
-" FIXME: consider using a grep command from vim-fugitive plugin
+" grep for word under cursor.
 nmap <silent> <leader>G z*:call <SID>GitGrepFun(shellescape(@/))<CR>:lopen<CR>:lfirst<CR>
 
-nmap <leader>R :lgrep <c-r><c-w>
+" Above grep-switching commands are legacy, as rg is generally much better.
+" grep for word under cursor.
+function! s:CwordGrep()
+    let l:word = expand("<cword>")
+    let @/ = l:word
+    return ":lgrep " . l:word
+endfunction
+nmap <expr> <leader>R <SID>CwordGrep()
 
-" FIXME: investigate why # in pattern breaks it - is it expanded to alt file name?
-" Note: rg ignores files that are (incorrectly) in .gitignore but are actually tracked by git!
 " Due to wrapper script for rg (in HOME and in PATH) we should check if real rg is installed.
 if executable("/usr/bin/rg") || executable("/usr/local/bin/rg")
     set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
