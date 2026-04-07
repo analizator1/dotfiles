@@ -766,9 +766,9 @@ nmap <silent> <leader>G z*:call <SID>GitGrepFun(shellescape(@/))<CR>:lopen<CR>:l
 " Above grep-switching commands are legacy, as rg is generally much better.
 " grep for word under cursor.
 function! s:CwordGrep()
-    let l:word = expand("<cword>")
-    let @/ = l:word
-    return ":lgrep " . l:word
+    let @/ = expand("<cword>")
+    call histadd('/', @/)
+    return ":lgrep " . @/
 endfunction
 nmap <expr> <leader>R <SID>CwordGrep()
 
