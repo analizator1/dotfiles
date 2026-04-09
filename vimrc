@@ -174,7 +174,7 @@ if v:version >= 802
         set diffopt+=inline:word
     endif
 endif
-if v:version >= 901
+if has("patch-9.1.1009")
     " If someone comments out a lot of lines (with # or //) and additionally inserts a few lines, then this setting
     " ensures Vim highlights only the comment signs as changed (but it needs 'inline' option too).
     " Note that sometimes this might interfere with inline highlights and cause them to be less precise. That's the case
