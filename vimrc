@@ -475,7 +475,8 @@ else
     Plug 'vim-scripts/systemrdl.vim'
     Plug 'Glench/Vim-Jinja2-Syntax'
     Plug 'mox-mox/vim-localsearch'
-    Plug 'derekwyatt/vim-fswitch'
+    " Switch between C/C++ source and header file
+    "Plug 'derekwyatt/vim-fswitch'
 
     " andymass/vim-matchup is a better version of matchit
     "packadd! matchit
@@ -685,14 +686,6 @@ nnoremap <silent> <F2> :%s/\s\+$//<CR>``
 
 " Show control chars
 nnoremap <silent> <F3> :set invlist<CR>
-
-" Switch between C/C++ source and header file
-if PlugLoaded('YouCompleteMe')
-    nnoremap <silent> <F4> :YcmCompleter GoToAlternateFile<CR>
-else
-    " with vim-fswitch plugin
-    nnoremap <silent> <F4> :FSHere<CR>
-endif
 
 set pastetoggle=<f5>
 
@@ -1081,6 +1074,9 @@ if PlugLoaded('YouCompleteMe')
     nnoremap <leader>gs :YcmCompleter GoToSymbol <c-r><c-w>
 
     nnoremap <leader>rn :YcmCompleter RefactorRename<space>
+
+    " Switch between C/C++ source and header file
+    nnoremap <F4> :YcmCompleter GoToAlternateFile<CR>
 endif
 
 " vim-lsp
@@ -1106,6 +1102,9 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <leader>gt <Plug>(lsp-type-definition)
 
     nmap <buffer> <leader>rn <Plug>(lsp-rename)
+
+    " Switch between C/C++ source and header file
+    nmap <buffer> <F4> <plug>(lsp-switch-source-header)
 
     nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
