@@ -1220,6 +1220,12 @@ if PlugLoaded('vim-lsp')
             \ 'pylsp-all': {
                 \ 'workspace_config': function('s:PyLspConfig'),
             \ },
+            \ 'ty': {
+                \ 'initialization_options': {
+                    \ 'logFile': '~/vim-lsp-ty.log',
+                    \ 'logLevel': 'debug',
+                \ },
+            \ },
             \ 'perlnavigator': {
                 \ 'workspace_config': function('s:PerlnavigatorConfig'),
             \ },
@@ -1254,6 +1260,8 @@ if PlugLoaded('vim-lsp')
         "let g:lsp_settings_filetype_perl = 'perlnavigator'
         " Install it according to https://github.com/richterger/Perl-LanguageServer
         let g:lsp_settings_filetype_perl = 'perl-languageserver'
+
+        let g:lsp_settings_filetype_rust = 'rust-analyzer'
 
     else
         """ Legacy section in case vim-lsp-settings is not loaded.
