@@ -192,7 +192,13 @@ if has("patch-9.1.1009")
     set diffopt+=linematch:300
 endif
 
-set nowrap
+"set nowrap
+" Let's instead leave wrap set, but make it break at a word boundary:
+set linebreak
+if has("patch-9.0.1525")
+    " Scrolling works with screen lines (when 'wrap' is set).
+    set smoothscroll
+endif
 
 set splitright
 "set splitbelow
@@ -661,7 +667,7 @@ nmap <C-j> :jumps<CR>
 imap <c-left> <c-\><c-o><c-left>
 imap <c-right> <c-\><c-o><c-right>
 
-" ctrl-up/down move cursor 1 row on screen (not necessarily in file)
+" ctrl-up/down move cursor 1 screen line up/down
 map <c-up> g<up>
 map <c-down> g<down>
 imap <c-up> <c-\><c-o><c-up>
