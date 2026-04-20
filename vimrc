@@ -500,7 +500,7 @@ else
     endif
 
     Plug 'google/vim-maktaba'
-    Plug 'bazelbuild/vim-bazel'
+    "Plug 'bazelbuild/vim-bazel'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
@@ -526,7 +526,13 @@ else
     Plug 'junegunn/vim-easy-align'
 
     " FIXME: autocmd handler for CursorMoved that it adds is pretty slow - try h/l over a long line.
-    Plug 'wellle/context.vim'
+    " FIXME: Disabled: it leaves a floating window after ctrl-w s ctrl-w T (split window and move the split to a new tab page).
+    " TODO: report it and then try to debug
+    " Also, there is an issue (and a workaround) with vim-smoothie: https://github.com/wellle/context.vim/issues/151
+    "Plug 'wellle/context.vim'
+
+    " Smooth scrolling (at the cost of frequent screen redraws)
+    "Plug 'psliwka/vim-smoothie'
 
     Plug 'drzel/vim-line-no-indicator'
     Plug 'rhysd/conflict-marker.vim'
