@@ -75,9 +75,16 @@ let g:python_indent.closed_paren_align_last_line = v:false
 " Workaround for some python2 modules getting imported by ycmd (python3).
 let $PYTHONPATH = ''
 
-" don't indent C++ class/struct scope declarations (public, protected, private)
-" don't indent switch case labels
-set cinoptions=g0,:0
+" * don't indent C++ class/struct scope declarations (public, protected, private)
+" * don't indent switch case labels
+" * don't indent inside C++ namespace
+" * Indent function calls like: one shiftwidth (default is 2s) for unclosed parenthesis, and the closing one aligned
+"   with the line of the matching opening parens.
+"   fun(
+"       arg1,
+"       arg2
+"   );
+set cinoptions=g0,:0,N-1s,(1s,m1
 
 " For :find to search recursively in current dir.
 set path+=**
