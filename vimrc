@@ -697,6 +697,9 @@ nnoremap <silent> <home> :call <SID>SmartHome()<CR>
 autocmd FileType c,cpp nmap <buffer> <silent> [m :call <SID>JumpPrevMethodCpp()<CR>
 autocmd FileType c,cpp nmap <buffer> <silent> ]m :call <SID>JumpNextMethodCpp()<CR>
 
+" While viewing a file (perhaps in diff mode), it may be desirable to open it in a new tab and jump around.
+nmap <leader>st <c-w>s:diffoff<cr><c-w>T
+
 """"""""""""""""""""""""""""
 " function key mappings
 
@@ -1129,8 +1132,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
 
     " Scroll popup window
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-b> lsp#scroll(-4)
+    "nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    "nnoremap <buffer> <expr><c-b> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
