@@ -100,6 +100,7 @@ set number                       " line numbering
 set updatetime=100               " in ms
 set showcmd                      " display incomplete commands
 set incsearch                    " do incremental searching
+set shortmess-=S                 " show search count message when searching
 set showmatch
 set completeopt=preview,menuone
 if has('textprop')
@@ -1492,11 +1493,6 @@ nmap <leader>cB <Plug>(conflict-marker-both-rev)
 """"""""""""""""""""""""""""
 " airline configuration
 
-" Warning: the searchcount extension for vim-airline may slow down Vim significantly when moving cursor and search
-" highlight is active due to usage of searchcount() with recompute=1. Especially if the file is large or regex contains
-" alternatives (|). In this case, either:
-" * turn off search highlight: <c-n>
-" * or turn off airline with :AirlineToggle
 if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
     " disable '-- INSERT --' in the last line
     set noshowmode
@@ -1517,6 +1513,15 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
     "let g:airline#extensions#whitespace#mixed_indent_algo = 1
     " Let's disable. One can always enable it with :AirlineToggleWhitespace.
     let g:airline#extensions#whitespace#enabled = 0
+
+    " Warning: the searchcount extension for vim-airline may slow down Vim significantly when moving cursor and search
+    " highlight is active due to usage of searchcount() with recompute=1. Especially if the file is large or regex contains
+    " alternatives (|). In this case, either:
+    " * turn off search highlight: <c-n>
+    " * or turn off airline with :AirlineToggle
+    " Edit: just disable the extension, modify shortmess instead. :AirlineToggle breaks with multiple tabs, it goes
+    " out-of-sync and airline stops working correctly.
+    let g:airline#extensions#searchcount#enabled = 0
 
     "let g:airline_left_sep = '»'
     "let g:airline_left_sep = '▶'
