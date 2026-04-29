@@ -23,6 +23,10 @@ if s:short_hostname =~ '^beta'
     "...
     "close(20)                               = 0 <0.000092>
     set nofsync
+    " Force user interface encoding to be utf-8, otherwise vim-airline displays ugly characters. This is needed because
+    " some scripts set $LC_ALL and $LANG to C (to make sure standard tools' output is parsable) and they run vim with
+    " this (because $EDITOR=vim).
+    set enc=utf-8
 endif
 
 """"""""""""""""""""""""""""
