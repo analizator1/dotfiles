@@ -204,6 +204,12 @@ if has("patch-9.0.1525")
     " Scrolling works with screen lines (when 'wrap' is set).
     set smoothscroll
 endif
+" Keep wrap set in diff mode.
+if has("patch-8.2.2490")
+    set diffopt+=followwrap
+endif
+" For log files let's not wrap.
+autocmd BufNewFile,BufRead *.log setlocal nowrap
 
 set splitright
 "set splitbelow
