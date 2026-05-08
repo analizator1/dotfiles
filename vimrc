@@ -285,6 +285,11 @@ if has("autocmd")
     autocmd FileType tex hi def link verbatimComment Comment
 
     autocmd FileType gitcommit setlocal textwidth=120
+    " Let's not lose folds created manually in a vim-fugitive buffer.
+    " Hint: in a commit view or generally in a buffer that shows a (unified) diff, use vim-fugitive's ]m mapping to go
+    " to start of next file, then zf]m to fold that file (create a fold), or zfG for the last file.
+    " vim-fugitive sets this to "delete".
+    autocmd FileType git setlocal bufhidden=
 
     " Python projects (see g:python_recommended_style)
     " obsoleted by vim-sleuth
