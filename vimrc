@@ -254,6 +254,8 @@ if has("autocmd")
     " This works better with vim-simpletemplate plugin.
     autocmd BufNewFile,BufRead *.tpl set filetype=html
     autocmd BufNewFile,BufRead *.lt set filetype=xml
+    " Kernel code
+    autocmd BufRead,BufNewFile *repos/linux/*.h set filetype=c
 
     " add an option to wrap long lines during inserting, because it gets deleted
     " in a C indent plugin
@@ -277,9 +279,6 @@ if has("autocmd")
     autocmd FileType tex hi def link verbatimComment Comment
 
     autocmd FileType gitcommit setlocal textwidth=120
-
-    " Kernel code
-    autocmd BufRead,BufNewFile *repos/linux/*.h set filetype=c
 
     " Python projects (see g:python_recommended_style)
     " obsoleted by vim-sleuth
@@ -554,6 +553,15 @@ else
     " For .tpl files with bottle SimpleTemplate syntax.
     Plug 'gbishop/vim-simpletemplate'
 
+    " This plugin sets, in particular:
+    " noswapfile bufhidden=unload
+    " for large files.
+    " Note: just using :view (open in read-only mode) does not disable swapfile.
+    " I don't like bufhidden=unload, as it means that a .gz file needs to be decompressed again.
+    " It doesn't provide visible speed-up and it generates an error in autocommand.
+    " Let's disable it.
+    "Plug 'vim-scripts/LargeFile'
+
     call plug#end()
 
     function! PlugLoaded(name)
@@ -825,7 +833,12 @@ autocmd FileType sh setlocal keywordprg=:Man
 if has('termguicolors')
     " This 'if' is needed on Fedora 20, see also a workaround in .bashrc.
     if &term == "screen.xterm-256color" || &term == "xterm-256color" || &term == "screen-256color" || &term == "screen-256color-fixed" || &term == "tmux-256color"
-        " Strangely, on Rocky9 these don't get set automatically:
+        " Strangely, on Rocky9 these don't get set automatically.
+        " This may also be needed for kitty due to https://github.com/vim/vim/issues/11729.
+        " See also https://github.com/vim/vim/issues/11716 which claims that:
+        " > "kitty" is not a valid TERM for kitty, always use "xterm-kitty"
+        " though in #11729 Bram said:
+        " > Anyway, Vim now ignores the "xterm-" prefix, since kitty is not xterm compatible.
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
         " Note: for gnu screen it requires "truecolor on" in screenrc.
