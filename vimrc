@@ -849,7 +849,7 @@ endif
 function! s:CustomizeHighlightGeneric()
     "hi IncSearch      ctermfg=235 ctermbg=142 guifg=#272e33 guibg=#c2dc9a cterm=underline
     "hi Search         ctermfg=235 ctermbg=142 guifg=#272e33 guibg=#829a5c cterm=none
-    hi link CurSearch IncSearch
+    "hi link CurSearch IncSearch
 
     " WarningMsg is used for search wraparound. Make it bright.
     hi WarningMsg   cterm=none ctermfg=white ctermbg=red       gui=none guifg=white guibg=red
@@ -866,8 +866,8 @@ function! s:CustomizeHighlightGeneric()
 
     " In some color schemes Todo has inverted colors (foreground same as Normal background), which makes text invisible
     " together with CursorLine (as it changes background to a similar color as Normal).
-    hi clear Todo
-    hi link Todo Keyword
+    "hi clear Todo
+    "hi link Todo Keyword
 
     if exists('g:alt_cursorline_color')
         unlet g:alt_cursorline_color
@@ -1401,10 +1401,12 @@ endif
 " choose a colorscheme
 
 " Note: this must be after prop_type_add() calls
+" Note: with vim-lsp, switching colorscheme breaks semantic highlighting. Perhaps proper highlight groups are only set
+" up once?
 if PlugLoaded('onedark.vim')
-    colorscheme onedark
+    "colorscheme onedark
     "colorscheme edge
-    "colorscheme everforest
+    colorscheme everforest
     "colorscheme spring-night
 endif
 
