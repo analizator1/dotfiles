@@ -134,37 +134,44 @@ endif
 " * in nerdtree window, as a workaround for the following issue: when hitting Enter on a file, it doesn't trigger
 "   WinLeave and &cursorline is kept set in nerdtree window even though it is no longer the current window
 " * in other unlisted buffers, such as vim-ctrlspace window, but enable it for vim help and man buffers
-function! s:SetCursorLine()
-    if &diff || ( ! &buflisted && &filetype != "help"  && &filetype != "man" )
-        set nocursorline
-    else
-        set cursorline
-    endif
-endfunction
-
-augroup CursorLine
-    autocmd!
-    autocmd WinLeave * set nocursorline
-    " WinEnter is not done for the first window, when Vim has just started. Another event must be used:
-    " - VimEnter: this solves the issue, but it does not work when opening a file using nerdtree.
-    " - BufWinEnter: solves both issues. From docs: "after a buffer is displayed in a window".
-    autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
-    autocmd OptionSet diff,filetype call <SID>SetCursorLine()
-augroup END
-
-function! s:SwapCursorLineColor()
-    if exists('g:alt_cursorline_color')
-        let l:old_cursorline_attrs = hlget('CursorLine')[0]
-        if exists('l:old_cursorline_attrs.guibg')
-            let l:old_cursorline_color = l:old_cursorline_attrs.guibg
-            call hlset([#{name: 'CursorLine', guibg: g:alt_cursorline_color}])
-            let g:alt_cursorline_color = l:old_cursorline_color
-        endif
-    endif
-endfunction
-
-"nmap <silent> <C-K> :set invcursorline<CR>
-nmap <silent> <C-K> :call <SID>SwapCursorLineColor()<CR>
+"function! s:SetCursorLine()
+"    if &diff || ( ! &buflisted && &filetype != "help"  && &filetype != "man" )
+"        set nocursorline
+"    else
+"        set cursorline
+"    endif
+"endfunction
+"
+"augroup CursorLine
+"    autocmd!
+"    autocmd WinLeave * set nocursorline
+"    " WinEnter is not done for the first window, when Vim has just started. Another event must be used:
+"    " - VimEnter: this solves the issue, but it does not work when opening a file using nerdtree.
+"    " - BufWinEnter: solves both issues. From docs: "after a buffer is displayed in a window".
+"    autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
+"    autocmd OptionSet diff,filetype call <SID>SetCursorLine()
+"augroup END
+"
+"function! s:SwapCursorLineColor()
+"    if exists('g:alt_cursorline_color')
+"        let l:old_cursorline_attrs = hlget('CursorLine')[0]
+"        if exists('l:old_cursorline_attrs.guibg')
+"            let l:old_cursorline_color = l:old_cursorline_attrs.guibg
+"            call hlset([#{name: 'CursorLine', guibg: g:alt_cursorline_color}])
+"            let g:alt_cursorline_color = l:old_cursorline_color
+"        endif
+"    endif
+"endfunction
+"nmap <silent> <C-K> :call <SID>SwapCursorLineColor()<CR>
+" UPDATE: don't enable cursorline by default, as it clashes with highlighting of occurrences of variable under the
+" cursor from vim-lsp. Use ctrl-k to enable it when needed, to spot the cursor.
+" Also, the main motivation for cursorline is to make it easier to spot the cursor after a jump. But since cursorline
+" and other approaches (like vim-search-pulse) are problematic, let's try to use cursor smear/trail effect available in
+" some terminals, for example in kitty: https://sw.kovidgoyal.net/kitty/conf/#opt-kitty.cursor_trail.
+" Edit: kitty does not know about position of cursor in vim/neovim buffer, it only knows screen position.
+" There is a plugin for neovim which does it smarter, see commit "feat: scroll in buffer space"
+" https://github.com/sphamba/smear-cursor.nvim/commit/ee6f45886e8ab5c20bb59ba54639ec74e5fc4e66
+nmap <silent> <C-K> :set invcursorline<CR>
 
 set diffopt+=vertical
 if v:version >= 802
