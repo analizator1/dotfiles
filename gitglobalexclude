@@ -8,14 +8,17 @@
 tags
 .gdb_history
 RSYNC_WORKSPACE_COMMIT_INFO.txt
-cs_workspaces
-cs_files
 compile_commands*.json
 .cache/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 __pycache__/
+
+# These are normally kept under .git/, but if you use git worktree, then .git may be a file, in which case vim-ctrlspace
+# stores them in project root.
+.cs_workspaces
+.cs_files
 
 # scripts kept inside some repos (inside in order to use settings from ~/ycm_global_extra_conf.py for given project) but
 # that can't be added to .gitignore nor to .git/info/exclude (because it's managed by build system)
