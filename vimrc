@@ -124,34 +124,41 @@ if v:version >= 901
     set jumpoptions=stack
 endif
 
-" Disable cursorline:
-" * it causes slight confusion: it is in every window, so every window looks like active (yeah, one needs to look at
-"   statusline)
-" * it does not play well with diff highlighting
-"set cursorline
-" Instead enable it in current window only, except it is disabled:
+" Use cursorline in active window only, except it is disabled:
 " * in diff mode - diff highlighting changes background color, but not foreground
 " * in nerdtree window, as a workaround for the following issue: when hitting Enter on a file, it doesn't trigger
 "   WinLeave and &cursorline is kept set in nerdtree window even though it is no longer the current window
 " * in other unlisted buffers, such as vim-ctrlspace window, but enable it for vim help and man buffers
-"function! s:SetCursorLine()
-"    if &diff || ( ! &buflisted && &filetype != "help"  && &filetype != "man" )
-"        set nocursorline
-"    else
-"        set cursorline
-"    endif
-"endfunction
-"
-"augroup CursorLine
-"    autocmd!
-"    autocmd WinLeave * set nocursorline
-"    " WinEnter is not done for the first window, when Vim has just started. Another event must be used:
-"    " - VimEnter: this solves the issue, but it does not work when opening a file using nerdtree.
-"    " - BufWinEnter: solves both issues. From docs: "after a buffer is displayed in a window".
-"    autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
-"    autocmd OptionSet diff,filetype call <SID>SetCursorLine()
-"augroup END
-"
+function! s:SetCursorLine()
+    if &diff || ( ! &buflisted && &filetype != "help"  && &filetype != "man" )
+        set nocursorline
+    else
+        " Use this line for SwapCursorLineColor.
+        "set cursorline
+
+        " This is used with ToggleUseCursorLineForWindow.
+        let &cursorline = get(w:, "use_cursorline")
+    endif
+endfunction
+
+augroup CursorLine
+    autocmd!
+    autocmd WinLeave * set nocursorline
+    " WinEnter is not done for the first window, when Vim has just started. Another event must be used:
+    " - VimEnter: this solves the issue, but it does not work when opening a file using nerdtree.
+    " - BufWinEnter: solves both issues. From docs: "after a buffer is displayed in a window".
+    autocmd WinEnter,BufWinEnter * call <SID>SetCursorLine()
+    autocmd OptionSet diff,filetype call <SID>SetCursorLine()
+augroup END
+
+" Allow user to decide whether to show cursorline in current window when it becomes active.
+function! s:ToggleUseCursorLineForWindow()
+    let w:use_cursorline = !get(w:, "use_cursorline")
+    call s:SetCursorLine()
+endfunction
+nmap <silent> <C-K> :call <SID>ToggleUseCursorLineForWindow()<CR>
+
+" Another variant: <C-K> swaps color to a more brighter one.
 "function! s:SwapCursorLineColor()
 "    if exists('g:alt_cursorline_color')
 "        let l:old_cursorline_attrs = hlget('CursorLine')[0]
@@ -163,15 +170,16 @@ endif
 "    endif
 "endfunction
 "nmap <silent> <C-K> :call <SID>SwapCursorLineColor()<CR>
-" UPDATE: don't enable cursorline by default, as it clashes with highlighting of occurrences of variable under the
-" cursor from vim-lsp. Use ctrl-k to enable it when needed, to spot the cursor.
-" Also, the main motivation for cursorline is to make it easier to spot the cursor after a jump. But since cursorline
+
+" Yet another variant: manual toggling, no automated switching:
+"nmap <silent> <C-K> :set invcursorline<CR>
+
+" Consider: the main motivation for cursorline is to make it easier to spot the cursor after a jump. But since cursorline
 " and other approaches (like vim-search-pulse) are problematic, let's try to use cursor smear/trail effect available in
 " some terminals, for example in kitty: https://sw.kovidgoyal.net/kitty/conf/#opt-kitty.cursor_trail.
 " Edit: kitty does not know about position of cursor in vim/neovim buffer, it only knows screen position.
 " There is a plugin for neovim which does it smarter, see commit "feat: scroll in buffer space"
 " https://github.com/sphamba/smear-cursor.nvim/commit/ee6f45886e8ab5c20bb59ba54639ec74e5fc4e66
-nmap <silent> <C-K> :set invcursorline<CR>
 
 set diffopt+=vertical
 if v:version >= 802
@@ -1623,12 +1631,12 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
 elseif PlugLoaded('tagbar')
     " vim-airline not loaded but we have tagbar
 
-    " tagbar#currenttag() caches some information and it works well only when used in a context of current (active) window
+    " tagbar#currenttag() caches some information and it works well only when used in a context of active window
     " therefore this is commented out:
     "set statusline=%<%f%h%m%r\ %{tagbar#currenttag('\ %s','','f','scoped-stl')}\ %=%-14.(%l,%c%V%)\ %P
     function! PrepareStatusLine()
         if g:statusline_winid == win_getid()
-            " this is current (active) window, use tagbar
+            " this is active window, use tagbar
             return "%<%f%h%m%r  %{tagbar#currenttag('%s','','f','scoped-stl')}%=%-14.(%l,%c%V%) %P"
         endif
         return "%<%f%h%m%r%=%-14.(%l,%c%V%) %P"
