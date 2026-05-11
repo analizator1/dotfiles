@@ -104,7 +104,7 @@ set number                       " line numbering
 set updatetime=100               " in ms
 set showcmd                      " display incomplete commands
 set incsearch                    " do incremental searching
-set shortmess-=S                 " show search count message when searching
+set shortmess-=S                 " show search count message when searching (default in nvim)
 set showmatch
 set completeopt=preview,menuone
 if has('textprop')
@@ -589,6 +589,23 @@ else
     endfunction
 
 endif
+
+" An alternative to vim-scripts/LargeFile.
+function! s:CheckLargeFile()
+    " Check size of buffer, not size of file (which may be compressed).
+    let file_size = line2byte(line("$") + 1) - 1
+    if file_size >= 25000000
+        " Unfortunately, this can't be set for a buffer or window, this is a global option.
+        set shortmess+=S  " don't show search count - it slows down Vim
+
+        echomsg "Buffer " . expand("%") . " is too large (" . file_size . " bytes), disabled search count"
+    endif
+endfunction
+
+augroup LargeFile
+    au!
+    au BufRead * call <SID>CheckLargeFile()
+augroup END
 
 """"""""""""""""""""""""""""
 " useful functions
