@@ -5,6 +5,14 @@ if v:progname =~? "evim"
     finish
 endif
 
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" Debugging of autocommands.
+"set verbose=9
+"set verbosefile=~/vim-verbosefile.log
+
 let s:short_hostname = substitute(hostname(), '\..*', '', '')
 let g:is_dev_host = v:version >= 901 && $USER != 'root' && has('python3_compiled')
 " Vim 8.0 does not have v:argv.
@@ -23,9 +31,9 @@ if s:short_hostname =~ '^beta'
     "...
     "close(20)                               = 0 <0.000092>
     set nofsync
-    " Force user interface encoding to be utf-8, otherwise vim-airline displays ugly characters. This is needed because
-    " some scripts set $LC_ALL and $LANG to C (to make sure standard tools' output is parsable) and they run vim with
-    " this (because $EDITOR=vim).
+    " Force user interface encoding to be utf-8 (default in nvim), otherwise vim-airline displays ugly characters. This
+    " is needed because some scripts set $LC_ALL and $LANG to C (to make sure standard tools' output is parsable) and
+    " they run vim with it (when $EDITOR=vim).
     set enc=utf-8
 endif
 
@@ -42,10 +50,6 @@ endif
 
 """"""""""""""""""""""""""""
 " most options settings go here
-
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
 
 " Keep swap file in a given directory (multiple can be given). We don't want "." here, as swap files hanging around can
 " fool Bazel into rebuilding everything if it's a file in sysroot.
@@ -101,6 +105,9 @@ set history=1000                 " keep X lines of command line history
 set ruler                        " show the cursor position all the time
 set laststatus=2                 " always display statusline (even if one window)
 set number                       " line numbering
+if v:version >= 802
+    set relativenumber           " relative line numbering
+endif
 set updatetime=100               " in ms
 set showcmd                      " display incomplete commands
 set incsearch                    " do incremental searching
@@ -183,7 +190,6 @@ nmap <silent> <C-K> :call <SID>ToggleUseCursorLineForWindow()<CR>
 
 set diffopt+=vertical
 if v:version >= 802
-    set relativenumber               " relative line numbering
     " Disable, patience sometimes makes diff larger. Default is myers.
     "set diffopt+=algorithm:patience
     set diffopt+=indent-heuristic
@@ -541,6 +547,11 @@ else
         packadd! editorconfig
     endif
 
+    " quickfix filtering (:Cfilter) and location list filtering (:Lfilter)
+    if v:version >= 802
+        packadd cfilter
+    endif
+
     Plug 'google/vim-maktaba'
     "Plug 'bazelbuild/vim-bazel'
 
@@ -574,6 +585,7 @@ else
     "Plug 'wellle/context.vim'
 
     " Smooth scrolling (at the cost of frequent screen redraws)
+    " An alternative to smear-cursor?
     "Plug 'psliwka/vim-smoothie'
 
     Plug 'drzel/vim-line-no-indicator'
@@ -616,8 +628,10 @@ function! s:CheckLargeFile()
     let file_size = line2byte(line("$") + 1) - 1
     if file_size >= 25000000
         " Unfortunately, this can't be set for a buffer or window, this is a global option.
-        set shortmess+=S  " don't show search count - it slows down Vim
+        set shortmess+=S  " disable search count - it slows down Vim (even if jumping to a close match)
 
+        " The message is not shown, perhaps because it is inside autocommand. It is not even saved in messages history,
+        " which is odd. Though it is displayed if verbose=9.
         echomsg "Buffer " . expand("%") . " is too large (" . file_size . " bytes), disabled search count"
     endif
 endfunction
@@ -906,8 +920,9 @@ function! s:CustomizeHighlightGeneric()
     "hi Search         ctermfg=235 ctermbg=142 guifg=#272e33 guibg=#829a5c cterm=none
     "hi link CurSearch IncSearch
 
-    " WarningMsg is used for search wraparound. Make it bright.
-    hi WarningMsg   cterm=none ctermfg=white ctermbg=red       gui=none guifg=white guibg=red
+    " WarningMsg is used for search wraparound message in the commandline. Note that if shortmess does not contain 'S'
+    " there is *instead* a search count + wraparound 'W' symbol displayed in the bottom-right corner.
+    "hi WarningMsg   cterm=none ctermfg=white ctermbg=red       gui=none guifg=white guibg=red
 
     " With vim-matchup, highlight of matching parenthesis can be confusing (it is kind of reverse of normal colors).
     " Especially with block cursor! Moreover, xml tags that are open-close (like <arg code="..." .. />) are highlighted
