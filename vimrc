@@ -491,8 +491,20 @@ else
         " Also, function signature popup seems to work better in YCM.
         " vim-lsp seems to do some computations (maybe calls to language server) synchronously during typing. When coding
         " it causes Vim to freeze for about a second every few written words (even when writing a comment).
-        " March 2026: let's give vim-lsp another chance. It's slows down Vim a bit, but it's acceptable.
-        let s:prefer_ycm = v:false
+        " March 2026: let's give vim-lsp another chance. It's slows down Vim a bit, but it's acceptable. It supports
+        " arbitrary language servers (but perhaps YouCompleteMe too?), and I need it for python (ty).
+        " May 2026: vim-lsp+clangd works poorly in the following scenario:
+        " 1. open workspace using vim-ctrlspace: a dozen .cpp/.h files in the first tab, one small .log in another tab
+        " 2. type a few c++ lines (in a file with >2k lines): maybe a range-for loop with some if and a few method calls
+        "    (this should still be quite fast)
+        " 3. go to the second tab, do a grep there which should load a few files, >50MB uncompressed (this is already
+        "    with shortmess workaround)
+        " 4. go back to the cpp file and write exactly the same c++ lines again - Vim seriously hangs when writing, and
+        "    is using ~100% CPU
+        " Perhaps vim-lsp processes lines from all open buffers, even from the log files?
+        " Note that disabling vim-airline does not help.
+        " Now repeat the same experiment with YouCompleteMe+clangd: it is very fast and it does not slow down at point 4.
+        let s:prefer_ycm = v:true
         if s:prefer_ycm
             Plug 'ycm-core/YouCompleteMe'
         else

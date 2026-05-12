@@ -382,8 +382,11 @@ fi
 # Disabling for now: ty/ruff don't support pyenv shims currently: https://github.com/astral-sh/ty/issues/2685
 # To check whether it works, open any python file installed with package manager, can be
 # /usr/lib/python3/dist-packages/xpra/client/gtk3/window/base.py, and see if ty resolves imports.
-#export PYENV_ROOT="$HOME/.pyenv"
-#if [[ -d $PYENV_ROOT/bin ]]; then
-#    export PATH="$PYENV_ROOT/bin:$PATH"
-#    eval "$(pyenv init - bash)"
-#fi
+# Edit: YouCompleteMe requires python 3.12.
+if ! command -v python3.12 >/dev/null; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    if [[ -d $PYENV_ROOT/bin ]]; then
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init - bash)"
+    fi
+fi
