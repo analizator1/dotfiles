@@ -586,7 +586,9 @@ else
 
     " Smooth scrolling (at the cost of frequent screen redraws)
     " An alternative to smear-cursor?
-    "Plug 'psliwka/vim-smoothie'
+    if has("patch-8.2.1978")
+        Plug 'psliwka/vim-smoothie'
+    endif
 
     Plug 'drzel/vim-line-no-indicator'
     Plug 'rhysd/conflict-marker.vim'
