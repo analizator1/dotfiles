@@ -630,15 +630,18 @@ function! s:CheckLargeFile()
         " Unfortunately, this can't be set for a buffer or window, this is a global option.
         set shortmess+=S  " disable search count - it slows down Vim (even if jumping to a close match)
 
-        " The message is not shown, perhaps because it is inside autocommand. It is not even saved in messages history,
-        " which is odd. Though it is displayed if verbose=9.
         echomsg "Buffer " . expand("%") . " is too large (" . file_size . " bytes), disabled search count"
+    else
+        " Not-too-large file, enable search count again.
+        set shortmess-=S
     endif
 endfunction
 
 augroup LargeFile
     au!
-    au BufRead * call <SID>CheckLargeFile()
+    " We do it on every buffer change. An older solution: disabling globally in BufRead, had one unexpected issue: the
+    " echomsg message was not shown, and not even saved in messages history. Though it worked with verbose=9.
+    autocmd WinEnter,BufWinEnter * call <SID>CheckLargeFile()
 augroup END
 
 """"""""""""""""""""""""""""
