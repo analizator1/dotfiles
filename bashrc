@@ -49,6 +49,15 @@ else
     export LC_TIME="en_US.UTF-8"
 fi
 
+if [[ $TERM == "xterm-kitty" ]]; then
+    # kitty exports it locally, but it's not exported over ssh.
+    # Though this only works for hosts that have kitty installed in ~/.local/kitty.app. For other hosts, I've copied
+    # below dir to ~/.terminfo.
+    if [[ -d ~/.local/kitty.app/lib/kitty/terminfo ]]; then
+        export TERMINFO=~/.local/kitty.app/lib/kitty/terminfo
+    fi
+fi
+
 __set_term()
 {
     echo ".bashrc: setting TERM=$1"

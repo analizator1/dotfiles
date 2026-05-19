@@ -901,7 +901,9 @@ autocmd FileType sh setlocal keywordprg=:Man
 
 if has('termguicolors')
     " This 'if' is needed on Fedora 20, see also a workaround in .bashrc.
-    if &term == "screen.xterm-256color" || &term == "xterm-256color" || &term == "screen-256color" || &term == "screen-256color-fixed" || &term == "tmux-256color"
+    if &term == "screen.xterm-256color" || &term == "xterm-256color" || &term == "screen-256color"
+                \ || &term == "screen-256color-fixed" || &term == "tmux-256color"
+                \ || &term == "xterm-kitty"
         " Strangely, on Rocky9 these don't get set automatically.
         " This may also be needed for kitty due to https://github.com/vim/vim/issues/11729.
         " See also https://github.com/vim/vim/issues/11716 which claims that:
