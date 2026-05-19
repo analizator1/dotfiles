@@ -1089,6 +1089,10 @@ function! s:CustomizeEverforest()
 
     " apply Normal to terminal windows:
     "hi clear Terminal
+
+    " theme from gitlab
+    hi DiffAdd guibg=#1f3623 guifg=NONE
+    hi DiffDelete guibg=#4a2325 guifg=NONE
 endfunction
 
 """""""" colorscheme: spring-night """"""""
