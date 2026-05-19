@@ -127,8 +127,11 @@ set scrolloff=7
 " After a couple of "jump back" (ctrl-o), when we make another jump, vim discards newer jumps, which is more reasonable
 " than the default behavior in which it keeps them. It makes more sense when doing code exploration, with frequently
 " jumping to function definitions and then going back. With "stack" it indeed goes back.
-if v:version >= 901
+if exists('+jumpoptions')
     set jumpoptions=stack
+endif
+if exists('+tabclose')
+    set tabclose=uselast
 endif
 
 " Use cursorline in active window only, except it is disabled:
@@ -1449,6 +1452,8 @@ if PlugLoaded('YouCompleteMe')
     let g:ycm_warning_symbol = '>'
     " diagnostics highlighting unfortunately overrides normal syntax highlighting, so let's disable it:
     let g:ycm_enable_diagnostic_highlighting = 0
+    let g:ycm_update_diagnostics_in_insert_mode = 0
+
     " Semantic highlighting based on LSP
     let g:ycm_enable_semantic_highlighting = 1
 
@@ -1655,6 +1660,8 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
 
         " Pretty name for fugitive temporary buffers.
         call airline#parts#define_function('fugitive_buffer_cmd', 'GetFugitiveCmd')
+        " Don't show branch name if window width is too small.
+        call airline#parts#define_minwidth('branch', 150)
 
         call airline#parts#define_accent('tagbar', 'bold')
         " HACK: accent is not applied if section isn't created afterwards. I copied below line from
