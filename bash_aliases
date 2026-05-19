@@ -29,8 +29,14 @@ alias vcsgrep="terminal_title_wrapper vcsgrep"
 alias make="terminal_title_wrapper make"
 
 if command -v vim >/dev/null; then
-	# do not connect to X server
-	alias vim="vim -X"
+    # Do not connect to X server. Motivation: I typically work over ssh, sometimes there is stale session cookie from
+    # xpra's X server instance, and it prints a warning, let's avoid it.
+    alias vim="vim -X"
+fi
+
+if command -v lsp_status >/dev/null; then
+    # Use pager.
+    alias lsp_status="lsp_status | less -F"
 fi
 
 # Add an "alert" alias for long running commands.  Use like so:
