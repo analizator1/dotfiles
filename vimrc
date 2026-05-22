@@ -1234,6 +1234,7 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
 
     " Scroll popup window
+    " Disabled in favor of a generic solution that also works in YouCompleteMe (ScrollPopup).
     "nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
     "nnoremap <buffer> <expr><c-b> lsp#scroll(-4)
 
@@ -1277,6 +1278,22 @@ elseif PlugLoaded('YouCompleteMe')
 
     let g:ycm_key_list_stop_completion = ['<cr>']
 endif
+
+" https://stackoverflow.com/questions/72602710/how-do-i-scroll-the-youcompleteme-getdoc-popup-with-the-keyboard
+" Improved to use v:count1.
+function ScrollPopup(count)
+    if (len(popup_list()) >= 1)
+        let popid = popup_list()[0]
+        let firstline = popup_getoptions(popid)['firstline']
+        "echo "firstline=" . firstline . " count=" . a:count
+        call popup_setoptions(popid, {'firstline': max([1, firstline + a:count])})
+    endif
+endfunc
+
+" Note: with :call it sets v:count1 properly, but also calls it that many times.
+" Using <cmd>call works as expected.
+nnoremap <leader>j <cmd>call ScrollPopup(v:count1)<CR>
+nnoremap <leader>k <cmd>call ScrollPopup(-v:count1)<CR>
 
 """"""""""""""""""""""""""""
 " vim-lsp specific configuration
@@ -1445,6 +1462,15 @@ if PlugLoaded('YouCompleteMe')
 
     " Disable auto hover
     let g:ycm_auto_hover = ''
+
+    " Syntax highlighting in hover window.
+    augroup MyYCMCustom
+      autocmd!
+      autocmd FileType c,cpp let b:ycm_hover = {
+        \ 'command': 'GetDoc',
+        \ 'syntax': &filetype
+        \ }
+    augroup END
 
     " This is the default:
     "let g:ycm_key_detailed_diagnostics = '<leader>d'
