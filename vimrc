@@ -653,7 +653,7 @@ augroup END
 " useful functions
 
 function! s:HighlightCurrentFunctionName()
-    let l:tag_name = tagbar#currenttag('%s','','','scoped-stl')
+    let l:tag_name = tagbar#currenttag('%s','','','nearest-stl')
     let l:tag_name = substitute(l:tag_name, '()', '', '')
     if l:tag_name == ''
         echo 'sorry, no function/tag here'
@@ -1634,7 +1634,9 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
     let g:airline#extensions#branch#format = 2
 
     let g:airline#extensions#tagbar#flags = 'f'
-    let g:airline#extensions#tagbar#searchmethod = 'scoped-stl'
+    " There is an issue with scoped-stl: it sometimes stops working in a C++ file. Specifically, it works until some
+    " line, and below that line it returns empty string. nearest-stl doesn't have this issue.
+    let g:airline#extensions#tagbar#searchmethod = 'nearest-stl'
 
     let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
@@ -1704,11 +1706,11 @@ elseif PlugLoaded('tagbar')
 
     " tagbar#currenttag() caches some information and it works well only when used in a context of active window
     " therefore this is commented out:
-    "set statusline=%<%f%h%m%r\ %{tagbar#currenttag('\ %s','','f','scoped-stl')}\ %=%-14.(%l,%c%V%)\ %P
+    "set statusline=%<%f%h%m%r\ %{tagbar#currenttag('\ %s','','f','nearest-stl')}\ %=%-14.(%l,%c%V%)\ %P
     function! PrepareStatusLine()
         if g:statusline_winid == win_getid()
             " this is active window, use tagbar
-            return "%<%f%h%m%r  %{tagbar#currenttag('%s','','f','scoped-stl')}%=%-14.(%l,%c%V%) %P"
+            return "%<%f%h%m%r  %{tagbar#currenttag('%s','','f','nearest-stl')}%=%-14.(%l,%c%V%) %P"
         endif
         return "%<%f%h%m%r%=%-14.(%l,%c%V%) %P"
     endfunction
