@@ -1136,7 +1136,16 @@ autocmd ColorScheme spring-night call <SID>CustomizeSpringNight()
 """"""""""""""""""""""""""""
 " vim-ctrlspace configuration
 
-"let g:CtrlSpaceDefaultMappingKey = "<leader>s"
+" This is default:
+"let g:CtrlSpaceDefaultMappingKey = "<C-Space>"
+" Unfortunately, vim-ctrlspace has the following logic:
+"  if s:defaultKey ==? "<C-Space>" && !has("gui_running") && !has("win32")
+"      let s:defaultKey = "<Nul>"
+"  endif
+" Which fails on kitty, because it does not send <nul> like older terminals do, but it sends real ctrl-space.
+" https://stackoverflow.com/questions/24983372/what-does-ctrlspace-do-in-vim
+" Let's add mapping for kitty:
+nmap <silent> <c-space> :CtrlSpace<CR>
 
 "let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
 let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
