@@ -944,10 +944,24 @@ function! s:CustomizeHighlightGeneric()
     "" Alternatively let's link to Search.
     "hi link MatchParen Search
 
-    " In some color schemes Todo has inverted colors (foreground same as Normal background), which makes text invisible
-    " together with CursorLine (as it changes background to a similar color as Normal).
-    "hi clear Todo
-    "hi link Todo Keyword
+    " In some color schemes Todo has inverted colors (foreground similar to Normal background), which makes text
+    " invisible together with CursorLine (as it changes background to a similar color as Normal) or in diff mode
+    " (DiffAdd).
+    hi clear Todo
+    hi link Todo Keyword
+
+    " theme from gitlab
+    hi DiffAdd guibg=#1f3623 guifg=NONE
+    hi DiffDelete guibg=#4a2325 guifg=NONE
+
+    " For changed lines, let's just change background, but leave text (foreground) color up to syntax highlighting.
+    " Hint: ':help hl-DiffChange' shows help with actual highlight.
+    hi clear DiffText
+    hi clear DiffChange
+    " Changed line.
+    hi DiffChange guibg=#29342a
+    " Changed text within a changed line.
+    hi DiffText guibg=#0a7c32
 
     if exists('g:alt_cursorline_color')
         unlet g:alt_cursorline_color
@@ -1043,16 +1057,6 @@ function! s:CustomizeOnedark()
 
     " apply Normal to terminal windows:
     hi clear Terminal
-
-    " make sure changed lines don't look like IncSearch
-    hi clear DiffText
-    hi clear DiffChange
-    hi DiffText term=reverse cterm=reverse ctermfg=109 gui=reverse guifg=#7fbbb3
-    hi DiffChange term=bold cterm=none ctermfg=180 gui=none guifg=#7fbbb3
-
-    " theme from gitlab
-    hi DiffAdd guibg=#1f3623 guifg=NONE
-    hi DiffDelete guibg=#4a2325 guifg=NONE
 endfunction
 
 """""""" colorscheme: edge """"""""
@@ -1094,10 +1098,6 @@ function! s:CustomizeEverforest()
 
     " apply Normal to terminal windows:
     "hi clear Terminal
-
-    " theme from gitlab
-    hi DiffAdd guibg=#1f3623 guifg=NONE
-    hi DiffDelete guibg=#4a2325 guifg=NONE
 endfunction
 
 """""""" colorscheme: spring-night """"""""
