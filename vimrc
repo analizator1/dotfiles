@@ -1686,6 +1686,13 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
         return "[:Git " . join(l:git_cmd) . "]"
     endfunction
 
+    function! DiffModeIndicator()
+        if &diff
+            return "[diff]"
+        endif
+        return ""
+    endfunction
+
     " Note: don't try to modify highlight groups (like airline_x), they're controlled by airline theme and any changes are
     " overwritten. Probably AirlineThemePatch could be used for that, but I didn't test it.
     function! AirlineInitSections()
@@ -1703,7 +1710,11 @@ if PlugLoaded('vim-airline') && PlugLoaded('vim-fugitive')
         call airline#parts#define_accent('tagbar', 'bold')
         " HACK: accent is not applied if section isn't created afterwards. I copied below line from
         " ~/.vim/plugged/vim-airline/autoload/airline/init.vim
-        let g:airline_section_x = airline#section#create_right(['coc_current_function', 'bookmark', 'scrollbar', 'tagbar', 'taglist', 'vista', 'gutentags', 'gen_tags', 'omnisharp', 'grepper', 'codeium', 'filetype'])
+        " Also show whether we are in diff mode (sometimes a single window is left in diff mode despite closeoff in
+        " diffopt). In diff mode tagbar#currenttag returns an empty string (bug?) which is confusing.
+        call airline#parts#define_function('diff_mode_indicator', 'DiffModeIndicator')
+        let g:airline_section_x = airline#section#create_right(['coc_current_function', 'bookmark', 'scrollbar', 'tagbar',
+                    \ 'diff_mode_indicator', 'taglist', 'vista', 'gutentags', 'gen_tags', 'omnisharp', 'grepper', 'codeium', 'filetype'])
 
         let spc = g:airline_symbols.space
         let g:airline_section_c = airline#section#create(['%<', 'file', spc, 'readonly', 'fugitive_buffer_cmd', 'coc_status', 'lsp_progress'])
