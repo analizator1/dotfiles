@@ -57,6 +57,8 @@ endif
 set directory=/tmp//
 
 " time out on mapping after three seconds, time out on key codes after a tenth of a second
+" also need to set escape-time in tmux.conf
+" https://devedge.github.io/2025/05/09/eliminating-esc-delays-in-tmux-vim-and-zsh/
 set timeout timeoutlen=3000 ttimeoutlen=100
 
 " <leader> is by default mapped to \
