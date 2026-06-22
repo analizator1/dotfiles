@@ -634,9 +634,13 @@ function! s:CheckLargeFile()
     " Check size of buffer, not size of file (which may be compressed).
     let file_size = line2byte(line("$") + 1) - 1
     if file_size >= 25000000
+        " No undo for this buffer.
+        setlocal undolevels=-1
+        " From docs: Don't use this for big files.
+        setlocal noswapfile
+
         " Unfortunately, this can't be set for a buffer or window, this is a global option.
         set shortmess+=S  " disable search count - it slows down Vim (even if jumping to a close match)
-
         echomsg "Buffer " . expand("%") . " is too large (" . file_size . " bytes), disabled search count"
     else
         " Not-too-large file, enable search count again.
