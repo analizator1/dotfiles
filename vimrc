@@ -240,7 +240,10 @@ autocmd BufNewFile,BufRead *.log setlocal nowrap
 set splitright
 "set splitbelow
 
-if &term == "screen" || &term == "screen-bce" || &term == "screen.xterm-256color" || &term == "xterm" || &term == "xterm-color" || &term == "xterm-256color" || &term == "screen-256color-fixed" || &term == "tmux-256color"
+if &term == "screen" || &term == "screen-bce" || &term == "screen.xterm-256color"
+            \ || &term == "xterm" || &term == "xterm-color" || &term == "xterm-256color"
+            \ || &term == "screen-256color-fixed" || &term == "tmux-256color"
+            \ || &term == "xterm-kitty"
     set title
 endif
 
