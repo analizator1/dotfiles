@@ -392,6 +392,8 @@ fi
 # To check whether it works, open any python file installed with package manager, can be
 # /usr/lib/python3/dist-packages/xpra/client/gtk3/window/base.py, and see if ty resolves imports.
 # Edit: YouCompleteMe requires python 3.12.
+# UPDATE: due to https://github.com/ycm-core/YouCompleteMe/issues/3580, when using pyenv vim needs to be built with:
+# export LDFLAGS="-rdynamic"
 if ! command -v python3.12 >/dev/null; then
     export PYENV_ROOT="$HOME/.pyenv"
     if [[ -d $PYENV_ROOT/bin ]]; then
