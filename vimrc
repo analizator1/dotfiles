@@ -979,6 +979,15 @@ function! s:CustomizeHighlightGeneric()
     call s:CustomizeCppHighlight()
 endfunction
 
+function! s:CustomizeHighlightGenericAfter()
+    if &t_Co < 256
+        " When &term == "linux" (which has t_Co==8), 'hi term' is not used. 'hi cterm=xxx' works, but it does not
+        " support underline. Let's link to Search, which is what QuickFixLine links to.
+        hi clear CursorLine
+        hi link CursorLine Search
+    endif
+endfunction
+
 function! s:CustomizeCppHighlight()
     hi link cppStructure Structure
     hi link cStructure cppStructure
@@ -1066,6 +1075,8 @@ function! s:CustomizeOnedark()
 
     " apply Normal to terminal windows:
     hi clear Terminal
+
+    call s:CustomizeHighlightGenericAfter()
 endfunction
 
 """""""" colorscheme: edge """"""""
@@ -1078,6 +1089,8 @@ let g:edge_better_performance = 1
 
 function! s:CustomizeEdge()
     call s:CustomizeHighlightGeneric()
+
+    call s:CustomizeHighlightGenericAfter()
 endfunction
 
 """""""" colorscheme: everforest """"""""
@@ -1107,6 +1120,8 @@ function! s:CustomizeEverforest()
 
     " apply Normal to terminal windows:
     "hi clear Terminal
+
+    call s:CustomizeHighlightGenericAfter()
 endfunction
 
 """""""" colorscheme: spring-night """"""""
@@ -1133,6 +1148,8 @@ function! s:CustomizeSpringNight()
 
     " from evening colorscheme
     hi Terminal ctermfg=231 ctermbg=236 guifg=#ffffff guibg=#333333
+
+    call s:CustomizeHighlightGenericAfter()
 endfunction
 
 """""""" colorscheme autocmds """"""""
