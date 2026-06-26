@@ -1195,8 +1195,11 @@ endif
 """"""""""""""""""""""""""""
 " LSP common configuration - things that should be shared between vim-lsp and YouCompleteMe.
 
+" -j to reduce number of workers. It looks like with large codebase, clangd needs at least 1GB of RAM per worker. My
+"  laptop has 16 CPUs and only 16GB RAM :-(
 let s:clangd_common_args = [
-    \ '--header-insertion=never'
+    \ '--header-insertion=never',
+    \ '-j', '6',
 \ ]
 
 " https://github.com/ycm-core/YouCompleteMe/wiki/FAQ#im-using-clangd-and-it-is-inserting-headers-that-i-dont-want
