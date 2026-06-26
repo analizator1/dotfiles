@@ -1173,6 +1173,14 @@ autocmd ColorScheme spring-night call <SID>CustomizeSpringNight()
 " Let's add mapping for kitty:
 nmap <silent> <c-space> :CtrlSpace<CR>
 
+" There is another bug with vim-ctrlspace and kitty: when TERM=xterm-kitty then pressing Ctrl-space+o opens
+" vim-ctrlspace's help and prints an error: Key 'u' doesn't work in this view.
+" After it happens, Esc is not decoded properly: pressing Ctrl-v+Esc (in insert more or cmdline) produces ^[[27u (if
+" numlock is disabled). This does not happen before Ctrl-space+o. Even just only entering vim-ctrlspace window does not
+" yet trigger this behavior. This is the same behavior as https://github.com/vim/vim/issues/15868. A workaround
+" suggested there: TERM=xterm-256color isn't good: it works, but it breaks background color erasing (try yank and put).
+" This bug is not present when using tmux (even inside kitty).
+
 "let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
 let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
 let g:CtrlSpaceSaveWorkspaceOnExit = 1
