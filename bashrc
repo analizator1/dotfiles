@@ -107,9 +107,26 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ -d "$HOME/clangd/19.1.0/llvm_install/bin" ] ; then
+# clangd under this path may not work if OS is too old (`GLIBC_2.29' not found). This is later fixed by adding a working
+# 19.1.0 version if system does not have at least clangd 19.
+if [[ -d $HOME/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/clangd/output/bin ]]; then
+    PATH="$HOME/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/clangd/output/bin:$PATH"
+fi
+
+has_recent_clangd=0
+if command -v clangd >/dev/null; then
+    clangd_version=$(clangd --version 2>/dev/null | sed -nE 's/^clangd version (\S+).*/\1/p')
+    if [[ $clangd_version =~ ^([0-9]+)\.[0-9]+\.[0-9]+$ ]]; then
+        clangd_version_major=${BASH_REMATCH[1]}
+        if (( clangd_version_major >= 19 )); then
+            has_recent_clangd=1
+        fi
+    fi
+fi
+if [[ $has_recent_clangd -eq 0 && -d "$HOME/clangd/19.1.0/llvm_install/bin" ]]; then
     PATH="$HOME/clangd/19.1.0/llvm_install/bin:$PATH"
 fi
+unset has_recent_clangd clangd_version clangd_version_major
 
 # Install go for more modern tools, like:
 # * https://github.com/tigrawap/slit   A good 'less' replacement. Works much faster for complex regexes.
