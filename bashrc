@@ -107,26 +107,50 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# clangd under this path may not work if OS is too old (`GLIBC_2.29' not found). This is later fixed by adding a working
-# 19.1.0 version if system does not have at least clangd 19.
-if [[ -d $HOME/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/clangd/output/bin ]]; then
-    PATH="$HOME/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/clangd/output/bin:$PATH"
-fi
-
-has_recent_clangd=0
-if command -v clangd >/dev/null; then
-    clangd_version=$(clangd --version 2>/dev/null | sed -nE 's/^clangd version (\S+).*/\1/p')
-    if [[ $clangd_version =~ ^([0-9]+)\.[0-9]+\.[0-9]+$ ]]; then
-        clangd_version_major=${BASH_REMATCH[1]}
-        if (( clangd_version_major >= 19 )); then
-            has_recent_clangd=1
+get_clangd_version_major()
+{
+    local path=$1
+    if [[ -x $path ]]; then
+        local clangd_version_str=$("$path" --version 2>/dev/null | sed -nE 's/^clangd version (\S+).*/\1/p')
+        if [[ $clangd_version_str =~ ^([0-9]+)\.[0-9]+\.[0-9]+$ ]]; then
+            echo "${BASH_REMATCH[1]}"
+            return 0
         fi
     fi
+    echo "0"
+}
+
+clangd_dir_to_add=
+clangd_version_major=0
+clangd_path_tmp=$(which clangd 2>/dev/null)
+if [[ -n $clangd_path_tmp ]]; then
+    clangd_version_major=$(get_clangd_version_major "$clangd_path_tmp")
 fi
-if [[ $has_recent_clangd -eq 0 && -d "$HOME/clangd/19.1.0/llvm_install/bin" ]]; then
-    PATH="$HOME/clangd/19.1.0/llvm_install/bin:$PATH"
+
+if (( clangd_version_major < 19 )) && [[ -x $HOME/clangd/19.1.0/llvm_install/bin/clangd ]]; then
+    clangd_dir_to_add=$HOME/clangd/19.1.0/llvm_install/bin
+    clangd_version_major=19
 fi
-unset has_recent_clangd clangd_version clangd_version_major
+
+if (( clangd_version_major < 22 )) && [[ -x $HOME/clangd/22.1.6/llvm_install/bin/clangd ]]; then
+    clangd_dir_to_add=$HOME/clangd/22.1.6/llvm_install/bin
+    clangd_version_major=22
+fi
+
+# clangd under this path may not work if OS is too old (`GLIBC_2.29' not found).
+# It also does not provide stddef.h and other headers, see ~/repos/ycm-llvm/README-KS.txt.
+clangd_path_tmp=$HOME/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/clangd/output/bin/clangd
+clangd_version_major_tmp=$(get_clangd_version_major "$clangd_path_tmp")
+if (( clangd_version_major_tmp > clangd_version_major )); then
+    clangd_dir_to_add=$HOME/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/clangd/output/bin
+    clangd_version_major=clangd_version_major_tmp
+fi
+
+if [[ -n $clangd_dir_to_add ]]; then
+    PATH="$clangd_dir_to_add:$PATH"
+fi
+
+unset clangd_dir_to_add clangd_version_major clangd_path_tmp clangd_version_major_tmp
 
 # Install go for more modern tools, like:
 # * https://github.com/tigrawap/slit   A good 'less' replacement. Works much faster for complex regexes.
