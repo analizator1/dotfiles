@@ -230,6 +230,11 @@ if has("patch-9.0.1525")
     " Scrolling works with screen lines (when 'wrap' is set).
     set smoothscroll
 endif
+" From docs:
+" You may also want to add "lastline" to the 'display' option to show as
+" much of the last line as possible.
+set display=lastline
+
 " Keep wrap set in diff mode.
 if has("patch-8.2.2490")
     set diffopt+=followwrap
