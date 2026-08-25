@@ -642,8 +642,10 @@ function! s:CheckLargeFile()
     " Check size of buffer, not size of file (which may be compressed).
     let file_size = line2byte(line("$") + 1) - 1
     if file_size >= 25000000
-        " No undo for this buffer.
-        setlocal undolevels=-1
+        " -1 for no undo at all. 0 for Vi compatibility: One level of undo and "u" undoes itself.
+        " It's better to allow one undo, otherwise changes done by mistake in a large file wouldn't be easily
+        " undoable.
+        setlocal undolevels=0
         " From docs: Don't use this for big files.
         setlocal noswapfile
 
