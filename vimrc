@@ -1202,6 +1202,11 @@ endif
 """"""""""""""""""""""""""""
 " LSP common configuration - things that should be shared between vim-lsp and YouCompleteMe.
 
+"let s:clangd_command = exepath("clangd")
+" Prevent system freeze when many C++ buffers are open in vim, we modify one header file, and clangd consumes all
+" available memory on my laptop (even with only 6 workers).
+let s:clangd_command = exepath("clangd_with_ulimit")
+
 " -j to reduce number of workers. It looks like with large codebase, clangd needs at least 1GB of RAM per worker. My
 "  laptop has 16 CPUs and only 16GB RAM :-(
 let s:clangd_common_args = [
@@ -1360,10 +1365,6 @@ if PlugLoaded('vim-lsp')
     " Make virtual text diagnostics less distracting.
     hi link LspWarningVirtualText Comment
 
-    let s:clangd_command = [
-            \ exepath("clangd")
-        \ ]
-
     function! s:PyLspConfig(server_name, key)
         let l:extra_paths = []
         return {'pylsp': {'plugins': {
@@ -1409,7 +1410,7 @@ if PlugLoaded('vim-lsp')
         " https://github.com/mattn/vim-lsp-settings#supported-languages
         let g:lsp_settings = {
             \ 'clangd': {
-                \ 'cmd': s:clangd_command + s:clangd_common_args
+                \ 'cmd': [s:clangd_command] + s:clangd_common_args
             \ },
             \ 'pylsp-all': {
                 \ 'workspace_config': function('s:PyLspConfig'),
@@ -1468,10 +1469,10 @@ if PlugLoaded('vim-lsp')
 
         " Without 'workspace_config', ':verbose LspStatus' fails with an error.
         " More info: https://blog.cskr.dev/posts/python-pylsp-vim-uv/
-        if executable(s:clangd_command[0])
+        if executable(s:clangd_command)
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'clangd',
-                \ 'cmd': s:clangd_command + s:clangd_common_args,
+                \ 'cmd': [s:clangd_command] + s:clangd_common_args,
                 \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
                 \ 'workspace_config': {},
                 \ })
@@ -1502,7 +1503,7 @@ endif
 " Note: Some options need to go to ~/.vim/after/plugin/additional_settings.vim
 
 if PlugLoaded('YouCompleteMe')
-    let g:ycm_clangd_binary_path = exepath("clangd")
+    let g:ycm_clangd_binary_path = s:clangd_command
 
     let g:ycm_clangd_args = s:clangd_common_args
 
