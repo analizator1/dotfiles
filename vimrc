@@ -223,8 +223,8 @@ if has("patch-9.1.1009")
     set diffopt+=linematch:300
 endif
 
-"set nowrap
-" Let's instead leave wrap set, but make it break at a word boundary:
+set nowrap
+" If wrap is set, make it break at a word boundary:
 set linebreak
 if has("patch-9.0.1525")
     " Scrolling works with screen lines (when 'wrap' is set).
@@ -235,12 +235,12 @@ endif
 " much of the last line as possible.
 set display=lastline
 
-" Keep wrap set in diff mode.
+" Keep wrap in diff mode.
 if has("patch-8.2.2490")
     set diffopt+=followwrap
 endif
 " For log files let's not wrap.
-autocmd BufNewFile,BufRead *.log setlocal nowrap
+"autocmd BufNewFile,BufRead *.log setlocal nowrap
 
 set splitright
 "set splitbelow
