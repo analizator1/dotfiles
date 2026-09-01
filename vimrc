@@ -148,8 +148,7 @@ function! s:SetCursorLine()
         " Use this line for SwapCursorLineColor.
         "set cursorline
 
-        " This is used with ToggleUseCursorLineForWindow.
-        let &cursorline = get(w:, "use_cursorline")
+        let &cursorline = get(g:, "use_cursorline")
     endif
 endfunction
 
@@ -164,11 +163,13 @@ augroup CursorLine
 augroup END
 
 " Allow user to decide whether to show cursorline in current window when it becomes active.
-function! s:ToggleUseCursorLineForWindow()
-    let w:use_cursorline = !get(w:, "use_cursorline")
+function! s:ToggleGlobalUseCursorLine()
+    let g:use_cursorline = !get(g:, "use_cursorline")
     call s:SetCursorLine()
 endfunction
-nmap <silent> <C-K> :call <SID>ToggleUseCursorLineForWindow()<CR>
+nmap <silent> <C-K> :call <SID>ToggleGlobalUseCursorLine()<CR>
+" Initial value.
+let g:use_cursorline = 1
 
 " Another variant: <C-K> swaps color to a more brighter one.
 "function! s:SwapCursorLineColor()
