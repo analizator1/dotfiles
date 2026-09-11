@@ -355,7 +355,13 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export LESS="-RS"
 export SYSTEMD_LESS="RS"
 
-if command -v vim >/dev/null; then
+if command -v vim9 >/dev/null; then
+    export EDITOR=vim9
+    export MANPAGER="vim9 +MANPAGER --not-a-term -"
+    if [[ ! $(vim9 --version | head -1) =~ Vi\ IMproved\ 9\. ]]; then
+        echo ".bashrc: Error: vim9 --version is not 9." >&2
+    fi
+elif command -v vim >/dev/null; then
     export EDITOR=vim
     # Something is incorrectly displayed in Vim 8.2.
     if [[ $(vim --version | head -1) =~ Vi\ IMproved\ 9\. ]]; then
@@ -386,7 +392,7 @@ if [[ $DISPLAY != ":0" ]]; then
         XPRA_LIST_OUT=$(xpra list-sessions 2>/dev/null)
         ret=$?
         if [[ $ret -ne 0 ]]; then
-            echo "Error listing xpra sessions" >&2
+            echo ".bashrc: Error listing xpra sessions" >&2
         else
             session_ids=( $(echo "$XPRA_LIST_OUT" | sed -n 's/\bSocketState.LIVE.*//p') )
             if [[ ${#session_ids[@]} -eq 1 ]]; then
