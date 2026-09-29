@@ -517,14 +517,16 @@ else
         " 1. open workspace using vim-ctrlspace: a dozen .cpp/.h files in the first tab, one small .log in another tab
         " 2. type a few c++ lines (in a file with >2k lines): maybe a range-for loop with some if and a few method calls
         "    (this should still be quite fast)
-        " 3. go to the second tab, do a grep there which should load a few files, >50MB uncompressed (this is already
+        " 3. go to the second tab, do a grep there which should load a few log files, >50MB uncompressed (this is already
         "    with shortmess workaround)
         " 4. go back to the cpp file and write exactly the same c++ lines again - Vim seriously hangs when writing, and
         "    is using ~100% CPU
         " Perhaps vim-lsp processes lines from all open buffers, even from the log files?
         " Note that disabling vim-airline does not help.
         " Now repeat the same experiment with YouCompleteMe+clangd: it is very fast and it does not slow down at point 4.
-        let s:prefer_ycm = v:true
+        " Actually, opening large log files seems to slow down vim in other moments, not only related to LSP. Let's get
+        " back to vim-lsp.
+        let s:prefer_ycm = v:false
         if s:prefer_ycm
             Plug 'ycm-core/YouCompleteMe'
         else
