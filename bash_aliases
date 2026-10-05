@@ -29,9 +29,9 @@ alias vcsgrep="terminal_title_wrapper vcsgrep"
 alias make="terminal_title_wrapper make"
 
 if command -v vim9 >/dev/null; then
-    # Do not connect to X server. Motivation: I typically work over ssh, sometimes there is stale session cookie from
-    # xpra's X server instance, and it prints a warning, let's avoid it.
-    alias vim="vim9 -X"
+    alias vim=vim9
+    alias view=view9
+    alias vimdiff=vimdiff9
 fi
 
 if command -v lsp_status >/dev/null; then
