@@ -1441,15 +1441,7 @@ if PlugLoaded('vim-lsp')
         " sudo apt install openjdk-21-jdk
         let g:lsp_settings_filetype_java = 'eclipse-jdt-ls'
 
-        let s:pwd = getcwd()
-        if s:pwd =~ 'HydraStore' && s:pwd !~ 'ostTesting' && s:pwd !~ 'nineLivesLicensing'
-            " pylsp does not support python2, but is more tolerant to it
-            " pylsp is affected by this issue: Jedi does not recognise type parameter lists. #2025
-            " https://github.com/davidhalter/jedi/issues/2025
-            let g:lsp_settings_filetype_python = 'pylsp-all'
-        else
-            let g:lsp_settings_filetype_python = 'ty'
-        endif
+        let g:lsp_settings_filetype_python = 'ty'
 
         " This one is closer to VSCode LSP:
         "let g:lsp_settings_filetype_python = 'basedpyright-langserver'
