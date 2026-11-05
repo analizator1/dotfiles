@@ -526,7 +526,9 @@ else
         " Now repeat the same experiment with YouCompleteMe+clangd: it is very fast and it does not slow down at point 4.
         " Actually, opening large log files seems to slow down vim in other moments, not only related to LSP. Let's get
         " back to vim-lsp.
-        let s:prefer_ycm = v:false
+        " Nov 2026: vim-lsp freezes vim too much on a ~20k LOC c++ file when typing, even without any log file opened in
+        " the same vim session. With YCM, vim is pretty fast.
+        let s:prefer_ycm = v:true
         if s:prefer_ycm
             Plug 'ycm-core/YouCompleteMe'
         else
